@@ -427,14 +427,11 @@ hr{
     font-weight: 900;   
     line-height: 45px;
 }
-.container-3-button li
-{
-    padding: 5px;
-}
+
 .container-3-button
 {
     padding-left: 130px;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
 
 .container-3-button li input
@@ -447,6 +444,7 @@ hr{
 {
     position: relative;
     padding-left: 50px;
+    margin-bottom: 10px;
 }
 
 .ri-mail-line
@@ -454,7 +452,7 @@ hr{
     z-index: 1;
     font-size: 24px;
     position: relative;
-    top: 47px;
+    top: 38px;
     right: -15px;
     color: rgba(0, 0, 0, 0.4);
 }
