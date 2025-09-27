@@ -1,6 +1,6 @@
 
 const OpenEye = document.getElementById("open-eye");
-const PassWordInput = document.getElementById("password");
+const PassWordInput = document.getElementById("passwordLogin");
 
 // Hàm hiển thi mật khẩu
 const ShowPassWord = (PassWordInput,OpenEye) => {
@@ -17,16 +17,12 @@ else
     OpenEye.classList.add("ri-eye-line");
 }
 }
-// gọi hàm hiển thị mật khẩu cho mật khẩu và nhập lại mật khẩu
-// OpenEye.addEventListener("click", () => {
-//     ShowPassWord(PassWordInput,OpenEye);
-// });
+// gọi hàm hiển thị mật khẩu cho mật khẩu
+OpenEye.addEventListener("click", () => {
+    ShowPassWord(PassWordInput,OpenEye);
+});
 
-// const OpenEye2 = document.getElementById("open-eye-2");
-// const PassWordInput2 = document.getElementById("password2");
-// OpenEye2.addEventListener("click",() => {
-//     ShowPassWord(PassWordInput2,OpenEye2);
-// })
+
 
 
 // mở menu
@@ -35,8 +31,14 @@ const iconHumberger = document.getElementById("Humberger-icon-open");
 iconHumberger.addEventListener('click', () => {
     SubMenuMobile.forEach( element => {
         element.classList.toggle("active");
-
     });
+    if (iconHumberger.classList.contains("ri-menu-line")) {
+    iconHumberger.classList.remove("ri-menu-line");
+    iconHumberger.classList.toggle("ri-close-large-line");
+  } else {
+    iconHumberger.classList.remove("ri-close-large-line");
+    iconHumberger.classList.toggle("ri-menu-line");
+  }
 });
 
 // mở submenu
@@ -49,6 +51,65 @@ menuSubmenu.forEach((item, index) => {
 });
 
 
+// mở from đăng ký
+const clickDangKy = document.getElementById("PropMenuUserRegister");
+const formDangKy = document.querySelectorAll(".register-container");
+const overlay = document.getElementById("overlay");
+
+const clickDangNhap = document.getElementById("PropMenuUserLogin");
+const formDangNhap = document.querySelectorAll(".login-container");
+
+
+
+// HÀM ĐÓNG VÀ HÀM MỞ FORM start
+const HamMoForm = (form) => {
+   form.forEach(element => {
+    element.classList.add("active");
+    overlay.classList.add("active");
+
+  });  
+}
+const HamDongFrom = (form) => {
+    form.forEach(element => {
+    element.classList.remove("active");
+    overlay.classList.remove("active");  
+    document.documentElement.classList.remove("no-scroll");
+  document.body.classList.remove("no-scroll");
+  });  
+}
+// HÀM ĐÓNG VÀ HÀM MỞ FORM end
+
+// Gọi hàm đóng và hàm mở form đăng nhập, đăng ký
+clickDangNhap.addEventListener("click", () => {
+  HamMoForm(formDangNhap);
+   document.documentElement.classList.add("no-scroll"); 
+  document.body.classList.add("no-scroll"); 
+});
+
+overlay.addEventListener("click", () => {
+ HamDongFrom(formDangKy);
+ HamDongFrom(formDangNhap);
+});
+
+clickDangKy.addEventListener("click", () => {
+ HamMoForm(formDangKy);
+    document.documentElement.classList.add("no-scroll"); 
+  document.body.classList.add("no-scroll"); 
+});
+
+//Mở thanh tìm kiếm
+const kinhlup = document.getElementById("KinhLup");
+const ThanhTimKiem = document.getElementById("Search-Mobile");
+kinhlup.addEventListener('click', () => {
+    ThanhTimKiem.classList.add("active");
+    overlay.classList.add("active");
+    if(overlay.classList.contains)
+    {
+      overlay.addEventListener('click', () => {
+        ThanhTimKiem.classList.remove("active");
+      });
+    }
+});
 
 const TextHoTen = document.getElementById('fullname');
   const TextEmail = document.getElementById('email');
