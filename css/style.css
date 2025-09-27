@@ -17,7 +17,7 @@ ul
     list-style: none;
 }
 
-/* Header */
+/* Header start*/
 .header{
     width: auto;
     height: 38px;
@@ -32,7 +32,9 @@ ul
 {
     color: white;
 }
-/* Navigation menu */
+/* header end */
+
+/* Navigation menu start*/
 
 .Navigation-menu-logo a
 {
@@ -45,6 +47,7 @@ ul
     justify-content: center;
     display: flex;
     gap: 40px;
+
 }
 .Navigation-menu-contents ul li
 {
@@ -61,6 +64,48 @@ ul
     margin-right: 14px;
     font-size: 20px;
 }
+/* propmenu dang ky dang nhap start*/
+.Navigation-menu-user
+{
+    position: relative;
+}
+.Navigation-menu-user ul 
+{
+    position: absolute;
+    top: 46px;
+    justify-self: center;
+    z-index: 2;
+    background-color: #4c4c4c;
+    color: white;
+    width: 200px;
+    display: none;
+}
+.Navigation-menu-user ul li
+{
+    width: 100%;
+    padding: 14px 20px;
+}
+.Navigation-menu-user ul li:hover
+{
+    background-color: #c5bfbf;
+
+}
+.Navigation-menu-user ul li a{
+    text-decoration: none;
+    color: #f5f5f5;
+    font-size: 14px;
+}
+.ri-user-3-line
+{
+    padding-bottom: 25px;
+}
+.Navigation-menu-user:hover .PropMenuUser ul 
+{
+    display: block;
+}
+
+/* propmenu dang ky dang nhap end */
+
 .Navigation-menu-search
 {
  padding: 14px 16px;
@@ -71,7 +116,7 @@ ul
     position: relative;
     background-color:#F0F0F0 ;
     padding-left: 40px;
-    width: 577px;
+    width: 277px;
     height: 38px;
     border: none;
     border-radius: 62px;
@@ -79,19 +124,67 @@ ul
 .Navigation-menu-search i
 {   
     font-size: 17px;
+    padding-left: 10px;
+    align-self: center;
     position: absolute;
-    left: 640px;
-    top: 62px;    
+    z-index: 1;
 }
 
-/* banner */
+/* Navigation menu end*/
+
+/* PropMenu Navigation start */
+.Navigation-menu-contents
+{
+    position: relative;
+}
+.PropMenuNavigation ul li
+{ 
+    width: 100%;
+    display: block;
+    padding: 14px 20px;
+}
+.PropMenuNavigation ul
+{
+    position: absolute;
+    top: 42px;
+    justify-self: center;
+    z-index: 2;
+    background-color: #4c4c4c;
+    color: white;
+    width: 250px;
+    display: none;
+}
+.Navigation-menu-contents ul > li a
+{
+    text-decoration: none;
+    color: black;
+    padding-bottom: 23px;
+}
+.Navigation-menu-contents ul li:hover .PropMenuNavigation ul
+{
+    display: block;
+}
+.PropMenuNavigation ul li:hover
+{
+    background-color: #c5bfbf;
+}
+.PropMenuNavigation ul li a
+{
+    color: #f5f5f5;
+}
+/* PropMenu Navigation end */
+
+
+
+
+/* banner start*/
 .banner
 {
-    width: auto;
-    height: 661px;
+    width: 100%;
+    height: auto;
     display: flex;
     background-color: rgba(242, 240, 241, 1);
-    position: relative;
+
 }
 
 .banner-title h1
@@ -100,7 +193,7 @@ ul
     font-weight: 1000;
     text-transform: uppercase;
     letter-spacing: -2px;
-    line-height: 0.9;  
+    line-height: 0.9;
 }
 .banner-content p
 {
@@ -176,18 +269,19 @@ ul
 {
     width: 50%;
     background-image: url("../image/image-banner.jpg");
-    background-position: -20px -70px;
-    background-size: 90%;
+    background-position: bottom right;
+    background-size: 85%;
     background-repeat: no-repeat;
 }
+/* banner end*/
 
 
 
-/* container */
+/* container start*/
 .container
 {
     margin-top: 50px;
-    height: 480px;
+    height: auto;
 }
 .container-contents
 {
@@ -200,12 +294,12 @@ ul
 }
 .container-contents ul 
 {
-    height: 198px;
+    height: auto;
 }
 .container-contents img
 {
     height: 265px;
-    width: 295px;
+    width: 265px;
     border-radius: 20px;
 }
 .container-title h1
@@ -224,7 +318,6 @@ ul
 .container-contents-rate
 {
     display: flex;
-
 }
 .container-contents-rate p 
 {
@@ -269,6 +362,7 @@ ul
 {
     text-align: center;
     height: 100px;
+    padding-top: 20px;
 }
 .viewall button{
         padding: 16px 74px;
@@ -285,8 +379,10 @@ hr{
     margin: 20px auto;
     width: 1350px;
 }
+/* container end*/
 
-/* contaner-1 */
+
+/* contaner-1 start*/
 .container-1-title h1
 {
     text-transform: uppercase;
@@ -353,7 +449,9 @@ hr{
      background-position: 40px -150px;
      background-size: 130%;
 }
+/* contaner-1 end*/
 
+/* footer start */
 .footer
 {
     margin-top: 180px;
@@ -367,7 +465,8 @@ hr{
 {
     display: flex;
     justify-content: space-around;
-    padding: 130px 0;
+    padding-top: 130px;
+    padding-bottom: 50px;
 }
 
 .footer-contents-item1
@@ -440,7 +539,7 @@ hr{
     height: 48px;
     border-radius: 62px;
 }
-#container-3-email input
+.container-3-email input
 {
     position: relative;
     padding-left: 50px;
@@ -455,4 +554,532 @@ hr{
     top: 38px;
     right: -15px;
     color: rgba(0, 0, 0, 0.4);
+}
+/* footer end */
+
+/* Navigation menu mobile srart */
+
+.Humberger-icon i
+{
+    font-size: 24px;
+    position: relative;
+    display: none;
+}
+.Humberger-menu-mobile
+{
+    width: 70%;
+    background-color: #4c4c4c;
+    z-index: 5;
+    position: absolute;
+    top: 1;
+    left: 0;
+    right: 0;
+    font-size: 20px;
+    transform: translateX(-100%); 
+    transition: transform 0.3s ease; 
+}
+
+.Humberger-menu-mobile.active
+{
+    transform: translateX(0);
+}
+
+.Humberger-Submenu-Mobile {
+  display: none;
+}
+
+.Humberger-Submenu-Mobile.active {
+  display: block;
+}
+
+
+
+.Humberger-menu-mobile a
+{
+text-decoration: none;
+color: #f5f5f5;
+padding-left: 30px;
+
+}
+.Humberger-menu-mobile li
+{
+    padding: 20px;
+    border-bottom: solid #f5f5f5;
+}
+
+
+/* Navigation menu mobile end */
+
+
+/* Mobile start*/
+@media (max-width: 767px)
+{
+    .header p
+    {
+        font-size: 12px;
+    }
+    .Navigation-menu
+{
+    gap: 20px;
+}
+    .Humberger-icon i
+    {
+        display: flex;
+    }
+    /*Navigation start  */
+    .Navigation-menu-search
+    {
+        padding: 0;
+    }
+    .Navigation-menu-search input
+    {
+        display: none;
+    }
+    .Navigation-menu-search i
+    {
+        position: relative;
+        left:5px;;
+        color: black;
+    }
+    .Navigation-menu-contents
+    {
+        display: none;
+    }
+        /*Navigation end  */
+/* banner start */
+   .banner
+   {
+    display: block;
+    height: 100%;
+   }
+
+    .banner-content-left
+    {   
+        padding: 10px;
+    }
+.banner-content-left,
+.banner-content-right {
+  width: 100%;
+}
+.banner-title h1
+{
+    font-size: 44px;
+    padding-top: 30px;
+}
+
+.banner-button input
+{
+    width: 100%;
+}
+
+.banner-footer ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 10px;
+    padding-bottom: 0px;
+}
+
+.banner-footer ul li:last-child li
+{
+    border-left: none;
+}
+.banner-content-right {
+  min-height: 450px; 
+  background-size: cover; 
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+/* banner end */
+
+/* container start */
+.container-contents
+{
+    display: block;
+}
+.container-contents 
+{
+    justify-self: center;
+    padding-bottom: 10px;
+}
+.container-contents-price
+{
+    padding-bottom: 20px;
+}
+/* container end */
+/* container-1 start */
+.container-1
+{
+    height: auto;
+        width: 100%;
+        padding-bottom: 30px;
+
+}
+.container-1-contents 
+{
+    width: 500px;
+    justify-self: center;
+    display: block;
+}
+
+.container-1-contents-item2
+{
+    background-position: -20px -100px;
+    background-size: 235%;
+}
+.container-1-contents-item3
+{
+    background-position: -30px -100px;
+    background-size: 140%;
+}
+
+/* container-1 end */
+/* footer start */
+.container-3
+{
+    width: 90%;
+    height: auto;
+    display: block;
+    padding: 10px;
+}
+
+.container-3-button
+{
+    padding: 10px 10px;
+}
+.footer-contents
+{
+    height: auto;
+    padding-top: 280px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    padding-left: 20px;
+}
+.footer-contents-item1-icon i
+{
+    font-size: 44px;
+}
+/* footer end */
+.container-3-email ul li input
+{
+    width: 100%;
+}
+#container-3-submit input
+{
+    width: 100%;
+}
+}
+/* mobile end */
+
+
+
+/* tablet air, mini */
+@media (min-width: 768px) and (max-width: 991px){
+    /* navigation start */
+.Navigation-menu-search input
+{   
+    display: none;
+}
+.Navigation-menu-search
+{
+    padding: 0;
+}
+.Navigation-menu-search i
+{
+    position: relative;
+}
+/* navigation end */
+
+/* banner start */
+   .banner
+   {
+    display: block;
+    height: 100%;
+   }
+
+    .banner-content-left
+    {   
+        padding: 10px;
+    }
+.banner-content-left,
+.banner-content-right {
+  width: 100%;
+}
+.banner-title h1
+{
+    font-size: 64px;
+    padding-top: 30px;
+}
+.banner-content p
+{
+    font-size: 20px;
+}
+.banner-button 
+{
+    justify-self: center;
+   
+}
+.banner-button input
+{
+
+   width: 520px;
+}
+
+.banner-footer ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.banner-content-right {
+  min-height: 750px; 
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+/* banner end */
+
+/* container start */
+.container-contents
+{
+    flex-wrap: wrap;
+}
+.container-contents 
+{
+    justify-self: center;
+    padding-bottom: 10px;
+}
+
+/* container end */
+/* container-1 start */
+.container-1
+{
+    height: auto;
+        width: 100%;
+        padding-bottom: 30px;
+
+}
+.container-1-contents 
+{
+    width: 100%;
+    justify-self: center;
+    display: block;
+}
+.container-1-contents-item1
+{
+    background-position: -170px -100px;
+    background-size: 140%;
+}
+.container-1-contents-item2
+{
+    background-position: -20px -100px;
+    background-size: 235%;
+}
+.container-1-contents-item3
+{
+    background-position: -30px -100px;
+    background-size: 140%;
+}
+.container-1-contents-item4
+{
+        background-position: 90px -100px;
+    background-size: 100%;
+}
+/* container-1 end */
+/* footer start */
+.container-3
+{
+    width: 90%;
+    height: auto;
+    padding: 10px 20px;
+}
+.container-3-email
+{
+    padding-bottom: 20px;
+}
+.container-3-email input
+{
+    padding-left: 50px;
+}
+.container-3-button
+{
+    padding-left: 10px;
+}
+.footer-contents
+{
+    font-size: 20px;
+    height: auto;
+    padding-top: 140px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+    padding-left: 20px;
+}
+.footer-contents-item1-icon i
+{
+    font-size: 44px;
+}
+/* footer end */
+}
+/* tablet pro */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+/* banner start */
+   .banner
+   {
+    display: block;
+    height: 100%;
+   }
+
+    .banner-content-left
+    {   
+        padding: 10px;
+    }
+.banner-content-left,
+.banner-content-right {
+  width: 100%;
+}
+.banner-title h1
+{
+    font-size: 84px;
+    padding-top: 30px;
+}
+.banner-content p
+{
+    font-size: 30px;
+}
+.banner-button 
+{
+    justify-self: center;  
+}
+
+.banner-button input
+{
+    font-size: 30px;
+   width: 520px;
+}
+
+.banner-footer ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.banner-content-right {
+  min-height: 950px; 
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+/* banner end */
+
+/* container start */
+.container-contents
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    width: 100%;
+}
+.container-contents img
+{
+    width: 365px;
+    height: 365px;
+}
+.container-contents-rate p
+{
+    font-size: 25px;
+}
+.container-contents-rate i
+{
+    font-size: 30px;
+}
+.container .container-contents-rate
+{
+    font-size: 120px;
+}
+.container-contents ul li{
+    justify-self: center;
+}
+.container-contents ul li 
+{
+    font-size: 20px;
+}
+.container-contents-price
+{
+    padding-bottom: 20px;
+}
+.container-contents 
+{
+    justify-self: center;
+    padding-bottom: 10px;
+}
+/* container end */
+/* container-1 start */
+.container-1
+{
+    height: auto;
+        width: 100%;
+        padding-bottom: 30px;
+
+}
+.container-1-contents 
+{
+    width: 100%;
+    justify-self: center;
+}
+.container-1-contents-item1
+{
+    background-position: 410px -10px;
+    background-size: 240%;
+}
+.container-1-contents-item2
+{
+    background-position: -20px -100px;
+    background-size: 235%;
+}
+.container-1-contents-item3
+{
+    background-position: -30px -100px;
+    background-size: 140%;
+}
+.container-1-contents-item4
+{
+        background-position: 30px -110px;
+    background-size: 130%;
+}
+/* container-1 end */
+/* footer start */
+.container-3
+{
+    width: 90%;
+    height: auto;
+    padding: 10px 20px;
+}
+.container-3-email
+{
+    padding-bottom: 20px;
+}
+.container-3-email input
+{
+    padding-left: 50px;
+}
+.container-3-button
+{
+    padding-left: 10px;
+}
+.footer-contents
+{
+    font-size: 30px;
+    height: auto;
+    padding-top: 140px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-around;
+    padding-left: 20px;
+}
+.footer-contents-item1-icon i
+{
+    font-size: 54px;
+    padding-bottom: 20px;
+}
+/* footer end */
 }
