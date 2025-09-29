@@ -35,7 +35,7 @@
 
       <!-- Navigation menu mobile start -->
       <div class="Humberger">
-        <div class="Humberger-icon"><i id="Humberger-icon-open"  class="ri-menu-line"></i></div>
+        <div class="Humberger-icon"><i id="Humberger-icon-open" class="ri-menu-line"></i></div>
         <ul class="Humberger-menu-mobile">
           <li><a href="#">ÁO <i class="ri-arrow-right-wide-fill"></i></a></li>
           <div class="Humberger-Submenu-Mobile">
@@ -129,13 +129,19 @@
         <i id="KinhLup" class="ri-search-line"></i>
         <input type="search" placeholder="Search for products..." />
       </li>
-        <input id="Search-Mobile" type="search" placeholder="Search for products..." />
+      <input id="Search-Mobile" type="search" placeholder="Search for products..." />
       <!-- icon -->
       <li class="Navigation-menu-cart-user">
         <ul>
           <li class="Navigation-menu-cart">
             <i class="ri-shopping-cart-2-line"></i>
           </li>
+
+          <li class="Navigation-menu-user-normal">
+            <button id="btnLogin" class="btn-user">Đăng Nhập</button>
+            <button id="btnRegister" class="btn-user">Đăng Ký</button>
+          </li>
+          <!-- dang nhap dang ky mobile start -->
           <li class="Navigation-menu-user">
             <i class="ri-user-3-line"></i>
             <div class="PropMenuUser">
@@ -145,45 +151,60 @@
               </ul>
             </div>
           </li>
+                    <!-- dang nhap dang ky mobile end -->
         </ul>
       </li>
     </ul>
   </div>
   <!-- Navigation menu end-->
-   <div id="overlay">
-   </div>
+  <div id="overlay">
+  </div>
   <!-- form register start-->
   <div class="register-container">
     <div class="register-form">
-      <h2>Đăng Ký</h2>
-      <form>
+      <div class="register-form-title">
+        <h2>Đăng Ký</h2>
+        <div class="iconX"><i class="ri-close-line"></i></div>
+      </div>
+      <form onsubmit="APIDANGKY(event)">
         <div class="register-form-group">
           <label for="fullname">Họ và tên</label>
-          <input type="text" id="fullname" placeholder="Nhập họ tên" />
+          <input type="text" id="fullname" placeholder="Nhập Họ Tên" />
+        </div>
+
+        <div class="register-form-group">
+          <label for="email">Username</label>
+          <input type="text" id="Username" placeholder="Nhập Username" />
         </div>
 
         <div class="register-form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Nhập email" />
+          <input type="email" id="email" placeholder="Nhập Email" />
+        </div>
+
+        <div class="register-form-group">
+          <label for="email">Số Điện Thoại</label>
+          <input type="tel" id="sdt" placeholder="Nhập Số Điện Thoại" />
         </div>
 
         <div class="register-form-group">
           <label for="password">Mật khẩu</label>
-          <input type="password" id="passwordRegister" placeholder="Nhập mật khẩu" />
+          <input type="password" id="passwordRegister" placeholder="Nhập Mật Khẩu" />
         </div>
 
         <div class="register-form-group">
           <label for="confirm">Xác nhận mật khẩu</label>
-          <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu" />
+          <input type="password" id="confirmPassword" placeholder="Nhập Lại Mật Khẩu" />
         </div>
 
-        <div class="register-form-group checkbox">
+        <!-- <div class="register-form-group checkbox">
           <input type="checkbox" id="agree" />
           <label for="agree">Tôi đồng ý với <a href="#">điều khoản</a></label>
-        </div>
+        </div> -->
 
-        <button id="Btnregister" type="button" class="btn">Đăng ký</button>
+        <button id="Btnregister" type="submit" class="btn">Đăng ký</button>
       </form>
+      <div id="registerMessage"></div>
     </div>
   </div>
   <!-- form register end-->
@@ -191,8 +212,11 @@
   <!-- form login start-->
   <div class="login-container">
     <div class="login-form">
-      <form>
-        <h2 class="login-title">Đăng Nhập</h2>
+      <form onsubmit="APIDANGNHAP(event)">
+        <div class="login-form-title">
+          <h2 class="login-title">Đăng Nhập</h2>
+          <div class="iconX"><i class="ri-close-line"></i></div>
+        </div>
         <div class="login-form-group">
           <label for="username" class="form-label">Tên đăng nhập</label>
           <input type="text" id="username" class="form-input" placeholder="Nhập tên đăng nhập">
@@ -203,15 +227,15 @@
           <span><i id="open-eye" class="ri-eye-line"></i></span>
         </div>
 
-        <div class="login-form-group">
+        <!-- <div class="login-form-group">
           <div class="RememberPassword">
             <input type="checkbox" id="agree" />
             <label for="agree">Ghi nhớ mật khẩu</label>
           </div>
           <div class="ForgotPassword"><a href="#">Quên mật khẩu?</a></div>
-        </div>
+        </div> -->
 
-        <button type="button" class="login-button">Đăng nhập</button>
+        <button type="submit" class="login-button">Đăng nhập</button>
         <div class="login-footer">
           <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
         </div>

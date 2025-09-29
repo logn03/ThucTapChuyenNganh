@@ -7,9 +7,10 @@
 
 html.no-scroll,
 body.no-scroll {
-  overflow: hidden;
-  height: 100%;
+    overflow: hidden;
+    height: 100%;
 }
+
 body {
     font-family: "Open Sans", sans-serif;
     font-optical-sizing: auto;
@@ -71,6 +72,29 @@ ul {
     font-size: 20px;
 }
 
+/* button dang nhap dang ky start */
+.Navigation-menu-user-normal {
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-user {
+    padding: 6px 12px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-user:hover {
+    background: #333;
+    color: white;
+}
+
+/* button dang nhap dang ky end */
+
+
 /* propmenu dang ky dang nhap start*/
 .Navigation-menu-user {
     position: relative;
@@ -105,20 +129,23 @@ ul {
 
 .ri-user-3-line {
     padding-bottom: 25px;
+    display: none;
 }
 
 .Navigation-menu-user:hover .PropMenuUser ul {
     display: block;
 }
 
-/* propmenu dang ky dang nhap end */
+/* propmenu dang ky dang nhap end*/
+
+/* Thanh tìm kiếm cho mobile end */
 .Navigation-menu-search {
     padding: 14px 16px;
     color: rgba(0, 0, 0, 0.4);
     position: relative;
 }
-#Search-Mobile
-{
+
+#Search-Mobile {
     position: absolute;
     top: 80px;
     width: 200px;
@@ -128,7 +155,8 @@ ul {
     z-index: 9;
     display: none;
 }
-#Search-Mobile.active{
+
+#Search-Mobile.active {
     display: flex;
 }
 
@@ -150,7 +178,7 @@ ul {
     z-index: 1;
 }
 
-/* Navigation menu end*/
+/* Thanh tìm kiếm cho mobile end*/
 
 /* PropMenu Navigation start */
 .Navigation-menu-contents {
@@ -556,11 +584,12 @@ hr {
     padding-left: 50px;
     margin-bottom: 10px;
 }
-#container-3-submit input:hover
-{
+
+#container-3-submit input:hover {
     background: #e9dada;
     cursor: pointer;
 }
+
 .ri-mail-line {
     z-index: 1;
     font-size: 24px;
@@ -620,21 +649,21 @@ hr {
 }
 
 /* Navigation menu mobile end */
-#overlay
-{
+#overlay {
     position: absolute;
-    top: 0
-    ;
+    top: 0;
     width: 100%;
     height: 100%;
     z-index: 4;
-    background:rgba(0, 0, 0, 0.2) ;
+    background: rgba(0, 0, 0, 0.2);
     display: none;
 }
+
 /* form register start */
+
 .register-container {
     position: absolute;
-    top: 150px;
+    top: 80px;
     justify-self: center;
     width: auto;
     height: auto;
@@ -643,12 +672,12 @@ hr {
     z-index: 9;
     display: none;
 }
-.register-container.active
-{
+
+.register-container.active {
     display: flex;
 }
-#overlay.active
-{
+
+#overlay.active {
     display: flex;
 }
 
@@ -660,11 +689,15 @@ hr {
     width: 450px;
 }
 
-.register-form h2 {
-    text-align: center;
+.register-form-title {
+    justify-content: space-between;
+    display: flex;
     margin-bottom: 20px;
 }
 
+.register-form-title h2 {
+    padding-left: 160px;
+}
 
 .register-form .register-form-group {
     margin-bottom: 15px;
@@ -708,6 +741,12 @@ hr {
     background: #0b5ed7;
 }
 
+#registerMessage {
+    padding-top: 10px;
+    color: red;
+    text-align: center;
+}
+
 /* form register end */
 
 
@@ -718,13 +757,14 @@ hr {
     justify-self: center;
     width: auto;
     height: auto;
-    background: rgba(0, 0, 0, 0.2);
     z-index: 9;
     display: none;
 }
-.login-container.active{
+
+.login-container.active {
     display: flex;
 }
+
 .login-form {
     background: #fff;
     padding: 30px 25px;
@@ -742,18 +782,28 @@ hr {
     color: #333;
 }
 
+.login-form-title h2 {
+    padding-left: 140px;
+}
+
+.login-form-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+
 .login-form-group {
     margin-bottom: 15px;
 }
-#passwordLogin
-{
+
+#passwordLogin {
     padding-right: 30px;
 }
-#open-eye
-{
+
+#open-eye {
     position: absolute;
     top: 195px;
-    right: 35px;  
+    right: 35px;
 }
 
 .form-label {
@@ -854,6 +904,18 @@ hr {
     .Navigation-menu-contents {
         display: none;
     }
+    .Navigation-menu-user-normal button
+    {
+        display: none;
+    }
+    .Navigation-menu-cart-user
+    {
+        padding-top: 20px;
+    }
+    .ri-user-3-line {
+        display: block;
+    }
+
 
     /*Navigation end  */
     /* banner start */
@@ -994,6 +1056,18 @@ hr {
     .Navigation-menu-search i {
         position: relative;
     }
+    .Navigation-menu-user-normal button
+    {
+        display: none;
+    }
+        .Navigation-menu-cart-user
+    {
+        padding-top: 20px;
+    }
+
+    .ri-user-3-line {
+        display: flex;
+    }
 
     /* navigation end */
 
@@ -1130,6 +1204,22 @@ hr {
 /* tablet pro */
 @media (min-width: 992px) and (max-width: 1199px) {
 
+/* Navigation start */
+    .Navigation-menu-user-normal button
+    {
+        display: none;
+    }
+        .Navigation-menu-cart-user
+    {
+        padding-top: 20px;
+    }
+
+    .ri-user-3-line {
+        display: flex;
+    }
+/* Navigation end */
+
+
     /* banner start */
     .banner {
         display: block;
@@ -1170,7 +1260,7 @@ hr {
     }
 
     .banner-content-right {
-        min-height: 950px;
+        min-height: 1400px;
         background-size: cover;
         background-repeat: no-repeat;
     }
