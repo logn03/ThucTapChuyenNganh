@@ -72,6 +72,14 @@ ul {
     font-size: 20px;
 }
 
+.Navigation-menu-contents a i {
+  display: inline-block; 
+  transition: transform 0.3s ease;
+}
+.Navigation-menu-contents ul li:hover a i{
+  transform: rotate(90deg);
+}
+
 /* button dang nhap dang ky start */
 .Navigation-menu-user-normal {
     gap: 10px;
@@ -189,6 +197,7 @@ ul {
     width: 100%;
     display: block;
     padding: 14px 20px;
+    border-bottom: solid #717579;
 }
 
 .PropMenuNavigation ul {
@@ -200,6 +209,7 @@ ul {
     color: white;
     width: 250px;
     display: none;
+
 }
 
 .Navigation-menu-contents ul>li a {
@@ -213,7 +223,8 @@ ul {
 }
 
 .PropMenuNavigation ul li:hover {
-    background-color: #c5bfbf;
+    background-color: #887d7d;
+    cursor: pointer;
 }
 
 .PropMenuNavigation ul li a {
@@ -251,6 +262,11 @@ ul {
 .banner-button {
     padding-top: 10px;
     padding-bottom: 30px;
+}
+.banner-button input:hover
+{
+    background-color: #6e3c3c;
+    cursor: pointer;
 }
 
 .banner-button input {
@@ -531,12 +547,41 @@ hr {
     padding-top: 15px;
 }
 
+/* tạo hiệu ứng hover cho các icon mạng xã hội start */
 .footer-contents-item1-icon li {
     display: inline-flex;
     text-align: center;
     align-content: center;
-    font-size: 28px;
+    font-size: 38px;
 }
+
+.ri-twitter-fill:hover {
+    color: #1DA1F2;
+    text-shadow: 0 0 10px #1DA1F2;
+    cursor: pointer;
+
+}
+
+.ri-facebook-circle-fill:hover {
+    color: #1877F2;
+    text-shadow: 0 0 10px #1877F2;
+    cursor: pointer;
+}
+
+.ri-instagram-line:hover {
+    color: #E4405F;
+    text-shadow: 0 0 10px #E4405F;
+    cursor: pointer;
+}
+
+.ri-github-fill:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #333;
+    cursor: pointer;
+}
+
+/* tạo hiệu ứng hover cho các icon mạng xã hội end */
+
 
 .footer-contents-item2,
 .footer-contents-item3,
@@ -598,6 +643,15 @@ hr {
     right: -15px;
     color: rgba(0, 0, 0, 0.4);
 }
+
+.footer-contents-item2 li:hover,
+.footer-contents-item3 li:hover,
+.footer-contents-item4 li:hover,
+.footer-contents-item5 li:hover {
+    color: #da8484;
+    cursor: pointer;
+}
+
 
 /* footer end */
 
@@ -663,7 +717,7 @@ hr {
 
 .register-container {
     position: absolute;
-    top: 80px;
+    top: 70px;
     justify-self: center;
     width: auto;
     height: auto;
@@ -696,7 +750,7 @@ hr {
 }
 
 .register-form-title h2 {
-    padding-left: 160px;
+    padding-left: 150px;
 }
 
 .register-form .register-form-group {
@@ -783,7 +837,7 @@ hr {
 }
 
 .login-form-title h2 {
-    padding-left: 140px;
+    padding-left: 150px;
 }
 
 .login-form-title {
@@ -904,18 +958,35 @@ hr {
     .Navigation-menu-contents {
         display: none;
     }
-    .Navigation-menu-user-normal button
-    {
+
+    .Navigation-menu-user-normal button {
         display: none;
     }
-    .Navigation-menu-cart-user
-    {
+
+    .Navigation-menu-cart-user {
         padding-top: 20px;
     }
+
     .ri-user-3-line {
         display: block;
     }
 
+    .register-container {
+        width: 350px;
+        top: 40px;
+    }
+
+    .register-form-title h2 {
+        padding-left: 110px;
+    }
+
+    .login-container {
+        width: 350px;
+    }
+
+    .login-container h2 {
+        padding-left: 100px;
+    }
 
     /*Navigation end  */
     /* banner start */
@@ -1056,12 +1127,12 @@ hr {
     .Navigation-menu-search i {
         position: relative;
     }
-    .Navigation-menu-user-normal button
-    {
+
+    .Navigation-menu-user-normal button {
         display: none;
     }
-        .Navigation-menu-cart-user
-    {
+
+    .Navigation-menu-cart-user {
         padding-top: 20px;
     }
 
@@ -1204,20 +1275,20 @@ hr {
 /* tablet pro */
 @media (min-width: 992px) and (max-width: 1199px) {
 
-/* Navigation start */
-    .Navigation-menu-user-normal button
-    {
+    /* Navigation start */
+    .Navigation-menu-user-normal button {
         display: none;
     }
-        .Navigation-menu-cart-user
-    {
+
+    .Navigation-menu-cart-user {
         padding-top: 20px;
     }
 
     .ri-user-3-line {
         display: flex;
     }
-/* Navigation end */
+
+    /* Navigation end */
 
 
     /* banner start */

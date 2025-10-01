@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- my css -->
+    <link rel="stylesheet" href="/css/TrangAdmin.css" />
+  </head>
+
+  <body>
+    <!-- side bars start -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav
+          id="sidebars"
+          class="col-md-2 col-lg-2 d-md-block sidebar d-lg-block"
+        >
+          <h4 class="p-3 border-bottom d-flex">
+            Dashboard
+            <button
+              id="IconClose"
+              class="btn btn-outline-secondary ms-4 d-lg-none"
+            >
+              <i class="bi bi-x-lg fs-6"></i>
+            </button>
+          </h4>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a href="/html/Trang Admin/TrangAdmin.html" class="nav-link"
+                ><i class="bi bi-house-door"></i> Trang chủ</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"
+                ><i class="bi bi-people"></i> Người dùng</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="/html/Trang Admin/SanPham.html" class="nav-link"
+                ><i class="bi bi-bag"></i> Sản phẩm</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link"
+                ><i class="bi bi-bar-chart"></i> Báo cáo</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <!-- side bars end -->
+
+        <!-- Main Content start-->
+        <main class="col-md-12 ms-sm-auto px-4 col-lg-10">
+          <!-- Navbar start -->
+          <nav
+            class="navbar navbar-expand-lg navbar-light bg-light my-3 rounded shadow-sm"
+          >
+            <div class="container-fluid">
+              <button
+                class="btn btn-outline-secondary me-2 d-flex d-lg-none"
+                id="toggleSidebar"
+              >
+                <i class="bi bi-list"></i>
+              </button>
+              <a class="navbar-brand fw-bold" href="#">Admin</a>
+              <div class="d-flex">
+                <button class="btn btn-outline-secondary">
+                  <i class="bi bi-chat-left"></i>
+                </button>
+
+                <button class="btn btn-outline-secondary ms-2">
+                  <i class="bi bi-bell"></i>
+                </button>
+
+                <button class="btn btn-outline-secondary ms-2">
+                  <i class="bi bi-person-circle"></i>
+                </button>
+              </div>
+            </div>
+          </nav>
+          <!-- Navbar end -->
+
+          <!-- Người dùng, doanh thu, đơn hàng start -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">Người dùng</h5>
+                  <p class="card-text fs-4">1,245</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-white bg-success shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">Doanh thu</h5>
+                  <p class="card-text fs-4">$12,540</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card text-white bg-warning shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title">Đơn hàng</h5>
+                  <p class="card-text fs-4">325</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Người dùng, doanh thu, đơn hàng end -->
+
+          <!-- profile nhân viên start -->
+          <div class="row g-3 mb-4">
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="card mb-3" style="max-width: 540px">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img
+                      src="/image/Profile-NhanVien.webp"
+                      class="img-fluid rounded-circle m-1"
+                      alt="avt"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">Name</h5>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-telephone pe-2"></i>+84 285353112
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-envelope pe-2"></i>name@gmail.com
+                      </p>
+                      <p class="card-text mb-1">
+                        <i class="bi bi-bookmark-dash pe-2"></i>19-05-2023
+                      </p>
+                    </div>
+                  </div>
+                  <hr class="mx-auto" style="width: 300px" />
+                  <div class="row text-center">
+                    <div class="col-4">
+                      <small class="text-muted">Mặt Hàng</small>
+                      <p>119</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Đã Bán</small>
+                      <p>504</p>
+                    </div>
+                    <div class="col-4">
+                      <small class="text-muted">Doanh Thu</small>
+                      <p>19542000</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- profile nhân viên end -->
+        </main>
+        <!-- Main Content end-->
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/html/Trang Admin/Admin.js"></script>
+  </body>
+</html>
