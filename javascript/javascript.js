@@ -20,68 +20,65 @@ OpenEye.addEventListener("click", () => {
   ShowPassWord(PassWordInput, OpenEye);
 });
 
+// chuyển trang của nút shopnow start
+document.getElementById("shopnow").addEventListener('click', () =>{
+  location.href ='./TatCaSanPham.html'
+})
+// chuyển trang của nút shopnow end
 
 
-
-// mở menu
-const SubMenuMobile = document.querySelectorAll(".Humberger-menu-mobile");
+// mở menu mobile
+const SubMenuMobile = document.getElementById("Humberger-menu-mobile");
 const iconHumberger = document.getElementById("Humberger-icon-open");
 iconHumberger.addEventListener('click', () => {
-  SubMenuMobile.forEach(element => {
-    element.classList.toggle("active");
-  });
-  if (iconHumberger.classList.contains("ri-menu-line")) {
-    iconHumberger.classList.remove("ri-menu-line");
-    iconHumberger.classList.toggle("ri-close-large-line");
-  } else {
-    iconHumberger.classList.remove("ri-close-large-line");
+  SubMenuMobile.classList.toggle("active");
     iconHumberger.classList.toggle("ri-menu-line");
-  }
+    iconHumberger.classList.toggle("ri-close-large-line");
 });
 
-// mở submenu
+// mở submenu mobile
 const showsubmenu = document.querySelectorAll(".Humberger-Submenu-Mobile");
-const menuSubmenu = document.querySelectorAll(".Humberger-menu-mobile > li");
-menuSubmenu.forEach((item, index) => {
-  item.addEventListener('click', () => {
-    showsubmenu[index].classList.toggle("active");
+const menuSubmenu = document.querySelectorAll("#Humberger-menu-mobile > li");
+const XoayMuiTen = document.querySelectorAll("#Humberger-menu-mobile > li > a > i");
+
+menuSubmenu.forEach((titleSubmenu, vitri) => {
+  titleSubmenu.addEventListener('click', () => {
+    showsubmenu[vitri].classList.toggle("active");
+    XoayMuiTen[vitri].classList.toggle('xoay');
   });
 });
 
 
-// mở from đăng ký
+
 const clickDangKy = document.getElementById("btnRegister");
-const formDangKy = document.querySelectorAll(".register-container");
+const formDangKy = document.getElementById("register-container");
 const overlay = document.getElementById("overlay");
 const clickDangNhap = document.getElementById("btnLogin");
-const formDangNhap = document.querySelectorAll(".login-container");
+const formDangNhap = document.getElementById("login-container");
+const clickDangNhapThanhHeader = document.getElementById("DangNhapHeader");
 
 
 
 // HÀM ĐÓNG VÀ HÀM MỞ FORM start
 const HamMoForm = (form) => {
-  form.forEach(element => {
-    element.classList.add("active");
+    form.classList.add("active");
     overlay.classList.add("active");
-  });
 }
 
 const HamDongFrom = (form) => {
-  form.forEach(element => {
-    element.classList.remove("active");
+    form.classList.remove("active");
     overlay.classList.remove("active");
-    document.documentElement.classList.remove("no-scroll");
     document.body.classList.remove("no-scroll");
-  });
 }
 
 
 // HÀM ĐÓNG VÀ HÀM MỞ FORM end
 
 // Gọi hàm đóng và hàm mở form đăng nhập, đăng ký start
+
+
 clickDangNhap.addEventListener("click", () => {
   HamMoForm(formDangNhap);
-  document.documentElement.classList.add("no-scroll");
   document.body.classList.add("no-scroll");
 });
 
@@ -92,14 +89,22 @@ overlay.addEventListener("click", () => {
 
 clickDangKy.addEventListener("click", () => {
   HamMoForm(formDangKy);
-  document.documentElement.classList.add("no-scroll");
   document.body.classList.add("no-scroll");
 });
+
+clickDangNhapThanhHeader.addEventListener('click', () => {
+  HamMoForm(formDangNhap);
+  document.body.classList.add("no-scroll");
+})
+
 // Gọi hàm đóng và hàm mở form đăng nhập, đăng ký end
 
 // Gọi hàm đóng và hàm mở form đăng nhập, đăng ký mobile start
 const clickDangNhapMobile = document.getElementById("PropMenuUserLogin");
 const clickDangKyMobile = document.getElementById("PropMenuUserRegister");
+
+
+
 
 clickDangNhapMobile.addEventListener("click", () => {
   HamMoForm(formDangNhap);
@@ -137,6 +142,24 @@ kinhlup.addEventListener('click', () => {
     });
   }
 });
+
+
+// hàm lấy dữ liệu từ localstorage sau khi fetch start
+function LayDuLieuLocalstorage () {
+    const userData =localStorage.getItem("userData");
+    if(userData)
+    {
+      try {
+        return JSON.parse(userData);
+      } catch (error) {
+        console.log('lỗi khi parse',err);
+        return null;
+      }
+    }
+    return null;
+}
+// hàm lấy dữ liệu từ localstorage sau khi fetch end
+
 
 
 
@@ -184,7 +207,6 @@ async function APIDANGKY(event) {
     // Hiển thị phản hồi
     if (rawResponse.ok) {
       alert("Đăng ký thành công!");
-
       setTimeout(() => {
         HamMoForm(formDangNhap)
     },1500);
@@ -210,7 +232,7 @@ async function APIDANGNHAP(event) {
   }
   try {
     const rawResponse = await fetch('http://localhost:8081/api/v1/auth/login', {
-              method: 'POST',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -234,11 +256,24 @@ async function APIDANGNHAP(event) {
           localStorage.setItem('userData', JSON.stringify(data.user));
         }
           HamDongFrom(formDangNhap);
-          setTimeout(() => {
-            window.location.href="/html/index.html";
-          }, 1500);
-      }
 
+          const ThanhHeader = document.querySelector(".header")
+          ThanhHeader.classList.toggle('hidden');
+          
+          const BtnLoginAndBtnRegister = document.getElementById("UserMenu");
+          const UserData = LayDuLieuLocalstorage();
+          if(UserData){
+          BtnLoginAndBtnRegister.innerHTML = 
+          `
+            <span>xin chao ${UserData.username}</span>
+            <button id="btnLogout" class="btn-user">Đăng Xuất</button>
+          `
+          }
+          else
+          {
+            console.log('chưa đăng nhập');
+          }
+      }
       else
       {
         alert('Đăng nhập thất bại')

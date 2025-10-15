@@ -4,9 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-
-
+  <title>LC.STORE</title>
   <link rel="stylesheet" href="/css/style.css" />
 
   <!-- font google start -->
@@ -25,7 +23,7 @@
   <!-- Header srart-->
   <div class="header">
     <p>Sign up and get 20% off to your first order.</p>
-    <a href="">Sign Up Now</a>
+    <p id="DangNhapHeader">Sign Up Now</p>
   </div>
   <!-- Header srart-->
 
@@ -36,7 +34,7 @@
       <!-- Navigation menu mobile start -->
       <div class="Humberger">
         <div class="Humberger-icon"><i id="Humberger-icon-open" class="ri-menu-line"></i></div>
-        <ul class="Humberger-menu-mobile">
+        <ul id="Humberger-menu-mobile">
           <li><a href="#">ÁO <i class="ri-arrow-right-wide-fill"></i></a></li>
           <div class="Humberger-Submenu-Mobile">
             <ul>
@@ -68,7 +66,7 @@
 
       <!-- Navigation menu mobile end -->
       <li class="Navigation-menu-logo">
-        <a href="#">
+        <a href="./index.html">
           <h1>LC.STORE</h1>
         </a>
       </li>
@@ -135,9 +133,12 @@
         <ul>
           <li class="Navigation-menu-cart">
             <i class="ri-shopping-cart-2-line"></i>
+            <span id="CartCount">
+                0
+            </span>
           </li>
 
-          <li class="Navigation-menu-user-normal">
+          <li class="Navigation-menu-user-normal" id="UserMenu">
             <button id="btnLogin" class="btn-user">Đăng Nhập</button>
             <button id="btnRegister" class="btn-user">Đăng Ký</button>
           </li>
@@ -160,7 +161,7 @@
   <div id="overlay">
   </div>
   <!-- form register start-->
-  <div class="register-container">
+  <div id="register-container">
     <div class="register-form">
       <div class="register-form-title">
         <h2>Đăng Ký</h2>
@@ -210,7 +211,7 @@
   <!-- form register end-->
 
   <!-- form login start-->
-  <div class="login-container">
+  <div id="login-container">
     <div class="login-form">
       <form onsubmit="APIDANGNHAP(event)">
         <div class="login-form-title">
@@ -258,7 +259,7 @@
         </p>
       </div>
       <div class="banner-button">
-        <input type="submit" value="Shop Now" />
+        <input id="shopnow" type="submit" value="Shop Now" />
       </div>
       <div class="banner-footer">
         <ul>
