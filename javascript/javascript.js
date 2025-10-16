@@ -1,3 +1,7 @@
+import { jwtDecode } from "jwt-decode";
+
+
+
 
 const OpenEye = document.getElementById("open-eye");
 const PassWordInput = document.getElementById("passwordLogin");
@@ -21,8 +25,8 @@ OpenEye.addEventListener("click", () => {
 });
 
 // chuyển trang của nút shopnow start
-document.getElementById("shopnow").addEventListener('click', () =>{
-  location.href ='./TatCaSanPham.html'
+document.getElementById("shopnow").addEventListener('click', () => {
+  location.href = './TatCaSanPham.html'
 })
 // chuyển trang của nút shopnow end
 
@@ -32,8 +36,8 @@ const SubMenuMobile = document.getElementById("Humberger-menu-mobile");
 const iconHumberger = document.getElementById("Humberger-icon-open");
 iconHumberger.addEventListener('click', () => {
   SubMenuMobile.classList.toggle("active");
-    iconHumberger.classList.toggle("ri-menu-line");
-    iconHumberger.classList.toggle("ri-close-large-line");
+  iconHumberger.classList.toggle("ri-menu-line");
+  iconHumberger.classList.toggle("ri-close-large-line");
 });
 
 // mở submenu mobile
@@ -61,14 +65,14 @@ const clickDangNhapThanhHeader = document.getElementById("DangNhapHeader");
 
 // HÀM ĐÓNG VÀ HÀM MỞ FORM start
 const HamMoForm = (form) => {
-    form.classList.add("active");
-    overlay.classList.add("active");
+  form.classList.add("active");
+  overlay.classList.add("active");
 }
 
 const HamDongFrom = (form) => {
-    form.classList.remove("active");
-    overlay.classList.remove("active");
-    document.body.classList.remove("no-scroll");
+  form.classList.remove("active");
+  overlay.classList.remove("active");
+  document.body.classList.remove("no-scroll");
 }
 
 
@@ -144,25 +148,6 @@ kinhlup.addEventListener('click', () => {
 });
 
 
-// hàm lấy dữ liệu từ localstorage sau khi fetch start
-function LayDuLieuLocalstorage () {
-    const userData =localStorage.getItem("userData");
-    if(userData)
-    {
-      try {
-        return JSON.parse(userData);
-      } catch (error) {
-        console.log('lỗi khi parse',err);
-        return null;
-      }
-    }
-    return null;
-}
-// hàm lấy dữ liệu từ localstorage sau khi fetch end
-
-
-
-
 //API CHO FORM ĐĂNG KÝ
 async function APIDANGKY(event) {
   event.preventDefault();
@@ -209,7 +194,7 @@ async function APIDANGKY(event) {
       alert("Đăng ký thành công!");
       setTimeout(() => {
         HamMoForm(formDangNhap)
-    },1500);
+      }, 1500);
 
     } else {
       alert("Đăng ký thất bại: " + (data.message || "Có lỗi xảy ra"));
@@ -225,8 +210,7 @@ async function APIDANGNHAP(event) {
   event.preventDefault();
   const username = document.getElementById("username").value;
   const password = document.getElementById("passwordLogin").value;
-  if(!username || !password)
-  {
+  if (!username || !password) {
     alert('vui lòng nhập thông tin đăng nhập');
     return;
   }
@@ -243,41 +227,57 @@ async function APIDANGNHAP(event) {
       })
     });
     const data = await rawResponse.json();
-      if (rawResponse.ok)
-      {
-        alert('Đăng Nhập Thành Công!');
-      
-        if(data.token)
-        {
-          localStorage.setItem('authToken', data.token);
-        }
-        if(data.user)
-        {
-          localStorage.setItem('userData', JSON.stringify(data.user));
-        }
-          HamDongFrom(formDangNhap);
+    if (rawResponse.ok) {
+      alert('Đăng Nhập Thành Công!');
 
-          const ThanhHeader = document.querySelector(".header")
-          ThanhHeader.classList.toggle('hidden');
-          
-          const BtnLoginAndBtnRegister = document.getElementById("UserMenu");
-          const UserData = LayDuLieuLocalstorage();
-          if(UserData){
-          BtnLoginAndBtnRegister.innerHTML = 
-          `
-            <span>xin chao ${UserData.username}</span>
-            <button id="btnLogout" class="btn-user">Đăng Xuất</button>
-          `
-          }
-          else
-          {
-            console.log('chưa đăng nhập');
-          }
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
       }
-      else
-      {
-        alert('Đăng nhập thất bại')
+      if (data.user) {
+        localStorage.setItem('userData', JSON.stringify(data.user));
       }
+      HamDongFrom(formDangNhap);
+
+      const ThanhHeader = document.querySelector(".header")
+      ThanhHeader.classList.toggle('hidden');
+
+      const BtnLoginAndBtnRegister = document.getElementById("UserMenu");
+
+      const authToken = localStorage.getItem("token");
+
+      if (authToken) {
+        const decoded = jwtDecode(token);
+        const now = Date.now() / 1000;
+
+        BtnLoginAndBtnRegister.innerHTML =
+          `
+        <span>xin chao ${decoded.username}</span>
+        <button id="btnLogout" class="btn-user">Đăng Xuất</button>
+          `
+
+
+        if (decoded.exp < now) {
+          alert("Hết hạn đăng nhập!");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            HamMoForm(formDangNhap)
+          }, 1500);
+
+        }
+
+        if (decoded.role === "Admin") {
+          window.location.href = "./html/Trang Admin/TrangAdmin.html";
+        } else if (decoded.role === "User") {
+          window.location.href = "/html/index.html";
+        } else {
+          alert("Không có quyền truy cập!");
+        }
+      }
+
+    }
+    else {
+      alert('Đăng nhập thất bại')
+    }
   } catch (error) {
     console.error("Lỗi khi gọi API:", error);
     alert("Không thể kết nối server!");
