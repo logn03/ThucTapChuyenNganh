@@ -1,8 +1,3 @@
-import { jwtDecode } from "jwt-decode";
-
-
-
-
 const OpenEye = document.getElementById("open-eye");
 const PassWordInput = document.getElementById("passwordLogin");
 
@@ -206,7 +201,9 @@ async function APIDANGKY(event) {
 }
 
 //API CHP FORM ĐĂNG NHẬP
+
 async function APIDANGNHAP(event) {
+  
   event.preventDefault();
   const username = document.getElementById("username").value;
   const password = document.getElementById("passwordLogin").value;
