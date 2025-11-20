@@ -34,26 +34,26 @@
           <h1>LC.STORE</h1>
         </a>
       </li>
-         <li class="Navigation-menu-contents">
-          <ul>
-            <li>
-              <a href="#">
-                DANH MỤC
-                <i class="ri-arrow-right-wide-fill"></i>
-              </a>
-              <!-- PropMenu Navigation start-->
-              <div class="PropMenuNavigation">
-                <ul>
-                  <li><a href="#">ÁO</a></li>
-                  <li><a href="#">QUẦN</a></li>
-                  <li><a href="#">PHỤ KIỆN</a></li>
-                  <li><a href="#">OUTLET</a></li>
-                </ul>
-              </div>
-              <!-- PropMenu Navigation end-->
-            </li>
-          </ul>
-        </li>
+      <li class="Navigation-menu-contents">
+        <ul>
+          <li>
+            <a href="#">
+              DANH MỤC
+              <i class="ri-arrow-right-wide-fill"></i>
+            </a>
+            <!-- PropMenu Navigation start-->
+            <div class="PropMenuNavigation">
+              <ul>
+                <li><a href="#">ÁO</a></li>
+                <li><a href="#">QUẦN</a></li>
+                <li><a href="#">PHỤ KIỆN</a></li>
+                <li><a href="#">OUTLET</a></li>
+              </ul>
+            </div>
+            <!-- PropMenu Navigation end-->
+          </li>
+        </ul>
+      </li>
 
 
       <li class="Navigation-menu-cart-user">
@@ -87,45 +87,125 @@
         <h2>Đăng Ký</h2>
         <div class="iconX"><i class="ri-close-line"></i></div>
       </div>
-      <form onsubmit="APIDANGKY(event)">
+      <form id="registerForm">
         <div class="register-form-group">
-          <label for="fullname">Họ và tên</label>
-          <input type="text" id="fullname" placeholder="Nhập Họ Tên" />
+          <div class="form-control">
+            <input type="value" required="" id="firtname" />
+            <label>
+              <span style="transition-delay: 0ms">F</span>
+              <span style="transition-delay: 50ms">i</span>
+              <span style="transition-delay: 100ms">r</span>
+              <span style="transition-delay: 150ms">t</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
         </div>
 
         <div class="register-form-group">
-          <label for="email">Username</label>
-          <input type="text" id="Username" placeholder="Nhập Username" />
+          <div class="form-control">
+            <input type="value" required="" id="lastname" />
+            <label>
+              <span style="transition-delay: 0ms">L</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">t</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
         </div>
 
         <div class="register-form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Nhập Email" />
+          <div class="form-control">
+            <input type="value" required="" id="Username" />
+            <label>
+              <span style="transition-delay: 0ms">U</span>
+              <span style="transition-delay: 50ms">s</span>
+              <span style="transition-delay: 100ms">e</span>
+              <span style="transition-delay: 150ms">r</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
         </div>
 
         <div class="register-form-group">
-          <label for="email">Số Điện Thoại</label>
-          <input type="tel" id="sdt" placeholder="Nhập Số Điện Thoại" />
+          <div class="form-control">
+            <input type="email" required="" id="email" />
+            <label>
+              <span style="transition-delay: 0ms">E</span>
+              <span style="transition-delay: 50ms">m</span>
+              <span style="transition-delay: 100ms">a</span>
+              <span style="transition-delay: 150ms">i</span>
+              <span style="transition-delay: 200ms">l</span>
+            </label>
+          </div>
         </div>
 
         <div class="register-form-group">
-          <label for="password">Mật khẩu</label>
-          <input type="password" id="passwordRegister" placeholder="Nhập Mật Khẩu" />
+          <div class="form-control">
+            <input type="tel" required="" id="sdt" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">h</span>
+              <span style="transition-delay: 100ms">o</span>
+              <span style="transition-delay: 150ms">n</span>
+              <span style="transition-delay: 200ms">e</span>
+            </label>
+          </div>
         </div>
 
         <div class="register-form-group">
-          <label for="confirm">Xác nhận mật khẩu</label>
-          <input type="password" id="confirmPassword" placeholder="Nhập Lại Mật Khẩu" />
+          <div class="form-control">
+            <input type="password" required="" id="passwordRegister" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">s</span>
+              <span style="transition-delay: 200ms">w</span>
+              <span style="transition-delay: 250ms">o</span>
+              <span style="transition-delay: 300ms">r</span>
+              <span style="transition-delay: 350ms">d</span>
+            </label>
+          </div>
         </div>
 
-        <!-- <div class="register-form-group checkbox">
-          <input type="checkbox" id="agree" />
-          <label for="agree">Tôi đồng ý với <a href="#">điều khoản</a></label>
-        </div> -->
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="password" required="" id="confirmPassword" />
+            <label>
+              <span style="transition-delay: 0ms">C</span>
+              <span style="transition-delay: 50ms">o</span>
+              <span style="transition-delay: 100ms">n</span>
+              <span style="transition-delay: 150ms">f</span>
+              <span style="transition-delay: 200ms">i</span>
+              <span style="transition-delay: 250ms">r</span>
+              <span style="transition-delay: 300ms">m</span>
+            </label>
+          </div>
+        </div>
 
-        <button id="Btnregister" type="submit" class="btn">Đăng ký</button>
+        <!-- From Uiverse.io by himanshu9682 -->
+        <div class="containerBtn">
+          <a href="#" class="button type--B">
+            <div class="button__line"></div>
+            <div class="button__line"></div>
+            <span class="button__text" id="btnRegisterSubmit">Đăng ký</span>
+            <div class="button__drow1"></div>
+            <div class="button__drow2"></div>
+          </a>
+        </div>
+
+        <div id="registerMessage" style="color: red"></div>
       </form>
-      <div id="registerMessage"></div>
     </div>
   </div>
   <!-- form register end-->
@@ -133,30 +213,53 @@
   <!-- form login start-->
   <div id="login-container">
     <div class="login-form">
-      <form onsubmit="APIDANGNHAP(event)">
+      <form id="loginForm">
         <div class="login-form-title">
           <h2 class="login-title">Đăng Nhập</h2>
           <div class="iconX"><i class="ri-close-line"></i></div>
         </div>
         <div class="login-form-group">
-          <label for="username" class="form-label">Tên đăng nhập</label>
-          <input type="text" id="username" class="form-input" placeholder="Nhập tên đăng nhập">
+          <!-- From Uiverse.io by liyaxu123 -->
+          <div class="form-control">
+            <input type="value" required="" id="username" />
+            <label>
+              <span style="transition-delay: 0ms">U</span>
+              <span style="transition-delay: 50ms">s</span>
+              <span style="transition-delay: 100ms">e</span>
+              <span style="transition-delay: 150ms">r</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
         </div>
         <div class="login-form-group">
-          <label for="password" class="form-label">Mật khẩu</label>
-          <input type="password" id="passwordLogin" class="form-input" placeholder="Nhập mật khẩu">
+          <div class="form-control">
+            <input type="password" required="" id="passwordLogin" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">s</span>
+              <span style="transition-delay: 200ms">w</span>
+              <span style="transition-delay: 250ms">o</span>
+              <span style="transition-delay: 300ms">r</span>
+              <span style="transition-delay: 350ms">d</span>
+            </label>
+          </div>
+
           <span><i id="open-eye" class="ri-eye-line"></i></span>
         </div>
-
-        <!-- <div class="login-form-group">
-          <div class="RememberPassword">
-            <input type="checkbox" id="agree" />
-            <label for="agree">Ghi nhớ mật khẩu</label>
-          </div>
-          <div class="ForgotPassword"><a href="#">Quên mật khẩu?</a></div>
-        </div> -->
-
-        <button type="submit" class="login-button">Đăng nhập</button>
+        <div class="containerBtn">
+          <a href="#" class="button type--B">
+            <div class="button__line"></div>
+            <div class="button__line"></div>
+            <span class="button__text" id="btnLoginSubmit" class="login-button">Đăng nhập</span>
+            <div class="button__drow1"></div>
+            <div class="button__drow2"></div>
+          </a>
+        </div>
         <div class="login-footer">
           <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
         </div>
@@ -169,11 +272,11 @@
     <hr>
     <div class="row">
       <!-- Sidebar -->
-       <div class="col-12 SideBarsMobile d-block d-lg-none d-xl-none">
+      <div class="col-12 SideBarsMobile d-block d-lg-none d-xl-none">
         <button id="BtnSideBarMobile"><i class="ri-arrow-right-s-line" style="font-size: 24px;"></i></button>
-       </div>
+      </div>
       <div id="Sidebars" class="col-2 Sidebars d-lg-block">
-        <div class="SideBarsTitle" >
+        <div class="SideBarsTitle">
           <div id="DanhMuc" class=" d-flex justify-content-between">
             <h2>DANH MỤC </h2>
             <i id="IconFilter" class="ri-sound-module-line" style="font-size: 22px;"></i>
@@ -286,7 +389,8 @@
             <img style="width: 100%;" src="/image/BannerFreeShip.jpg" alt="">
           </div>
 
-          <div class="col-lg-4 col-md-6 container-content d-flex justify-content-center align-items-center flex-column ">
+          <div
+            class="col-lg-4 col-md-6 container-content d-flex justify-content-center align-items-center flex-column ">
             <ul class="text-center ">
               <li class="container-contents-image">
                 <img src="/image/container-image-1.png" alt="" />
@@ -535,8 +639,18 @@
     </div>
   </div>
   <!-- footer end-->
+       <script type="importmap">
+      {
+        "imports": {
+          "jwt-decode": "https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js"
+        }
+      }
+    </script>
+  <script type="module" src="/javascript/MainJs.js"></script>
   <script src="/javascript/JSTatCaSanPham.js"></script>
   <script src="/javascript/auth.js"></script>
+  <script type="module" src="/javascript/register.js"></script>
+  <script type="module" src="/javascript/Login.js"></script>
 </body>
 
 </html>

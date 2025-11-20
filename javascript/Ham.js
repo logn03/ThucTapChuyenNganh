@@ -43,15 +43,4 @@ export const toggleSubMenu = (submenu, arrow) => {
   arrow.classList.toggle("xoay");
 };
 
-// Mở thanh tìm kiếm
-export const enableSearchBar = (trigger, searchBox, overlay) => {
-  trigger.addEventListener("click", () => {
-    searchBox.classList.add("active");
-    overlay.classList.add("active");
 
-    overlay.addEventListener("click", () => {
-      searchBox.classList.remove("active");
-      overlay.classList.remove("active");
-    });
-  });
-};

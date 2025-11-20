@@ -50,12 +50,13 @@ IconFilter.addEventListener('click', () => {
 // mở menu mobile
 const SubMenuMobile = document.getElementById("Humberger-menu-mobile");
 const iconHumberger = document.getElementById("Humberger-icon-open");
+if(iconHumberger){
 iconHumberger.addEventListener('click', () => {
   SubMenuMobile.classList.toggle("active");
     iconHumberger.classList.toggle("ri-menu-line");
     iconHumberger.classList.toggle("ri-close-large-line");
 });
-
+}
 // mở submenu mobile
 const showsubmenu = document.querySelectorAll(".Humberger-Submenu-Mobile");
 const menuSubmenu = document.querySelectorAll("#Humberger-menu-mobile > li");
@@ -74,8 +75,6 @@ const formDangKy = document.getElementById("register-container");
 const overlay = document.getElementById("overlay");
 const clickDangNhap = document.getElementById("btnLogin");
 const formDangNhap = document.getElementById("login-container");
-const clickDangNhapThanhHeader = document.getElementById("DangNhapHeader");
-
 
 
 // HÀM ĐÓNG VÀ HÀM MỞ FORM start
@@ -111,10 +110,7 @@ clickDangKy.addEventListener("click", () => {
   document.body.classList.add("no-scroll");
 });
 
-clickDangNhapThanhHeader.addEventListener('click', () => {
-  HamMoForm(formDangNhap);
-  document.body.classList.add("no-scroll");
-})
+
 
 // Gọi hàm đóng và hàm mở form đăng nhập, đăng ký end
 
@@ -149,18 +145,7 @@ document.querySelector(".register-form-title .iconX i").addEventListener("click"
   HamDongFrom(formDangKy);
 });
 
-//Mở thanh tìm kiếm
-const kinhlup = document.getElementById("KinhLup");
-const ThanhTimKiem = document.getElementById("Search-Mobile");
-kinhlup.addEventListener('click', () => {
-  ThanhTimKiem.classList.add("active");
-  overlay.classList.add("active");
-  if (overlay.classList.contains) {
-    overlay.addEventListener('click', () => {
-      ThanhTimKiem.classList.remove("active");
-    });
-  }
-});
+
 
 
 const OpenEye = document.getElementById("open-eye");

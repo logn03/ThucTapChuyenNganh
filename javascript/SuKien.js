@@ -4,7 +4,6 @@ import {
   closeForm,
   redirectTo,
   toggleMenu,
-  enableSearchBar
 } from './Ham.js';
 
 // Ẩn/hiện mật khẩu
@@ -71,13 +70,7 @@ export const suKienNutDongForm = () => {
   }
 };
 
-// Thanh tìm kiếm
-export const suKienThanhTimKiem = () => {
-  const overlay = document.getElementById("overlay");
-  const searchTrigger = document.getElementById("KinhLup");
-  const searchBox = document.getElementById("Search-Mobile");
-  enableSearchBar(searchTrigger, searchBox, overlay);
-};
+
 
 // Hàm gọi tất cả sự kiện
 export const suKien = () => {
@@ -86,5 +79,4 @@ export const suKien = () => {
   suKienMenuMobile();
   suKienFormDangNhap();
   suKienNutDongForm();
-  suKienThanhTimKiem();
 };

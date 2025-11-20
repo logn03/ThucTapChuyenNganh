@@ -26,13 +26,20 @@
       const user = getCurrentUser();
       const displayName = (user && user.username) ? user.username : 'Tài khoản';
 
+      const isAdminPage =
+        document.body.getAttribute('data-admin-page') === 'true';
+
       userMenu.innerHTML = `
-        <div class="Navigation-user-logged-in">
-          <span id="displayUsername">${escapeHtml(displayName)}</span>
-          <button id="btnProfile" class="btn-user">Tài khoản</button>
-          <button id="btnLogout" class="btn-user">Đăng Xuất</button>
-        </div>
-      `;
+  <div class="Navigation-user-logged-in">
+    <span id="displayUsername">${escapeHtml(displayName)}</span>
+    ${isAdminPage
+          ? ''  // 👉 TRANG ADMIN → KHÔNG RENDER NÚT TÀI KHOẢN
+          : '<button id="btnProfile" class="btn-user">Tài khoản</button>'
+        }
+    <button id="btnLogout" class="btn-user">Đăng Xuất</button>
+  </div>
+`;
+
 
       // attach handlers
       const btnLogout = document.getElementById('btnLogout');
@@ -59,14 +66,12 @@
       }
 
     } else {
-      // show default login/register buttons (original markup)
       userMenu.innerHTML = `
         <button id="btnLogin" class="btn-user">Đăng Nhập</button>
         <button id="btnRegister" class="btn-user">Đăng Ký</button>
       `;
 
-      // If there are existing scripts that open forms, they will attach handlers; otherwise users can use existing page flows.
-      // Try to re-attach mobile PropMenu handlers if present
+
       const propLogin = document.getElementById('PropMenuUserLogin');
       const propRegister = document.getElementById('PropMenuUserRegister');
       if (propLogin) propLogin.style.display = '';
