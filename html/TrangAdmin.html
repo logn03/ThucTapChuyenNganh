@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- my css -->
+    <link rel="stylesheet" href="/css/TrangAdmin.css" />
+  </head>
+
+  <body>
+    <!-- side bars start -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav
+          id="sidebars"
+          class="col-md-2 col-lg-2 d-md-block sidebar d-lg-block"
+        >
+          <h4 class="p-3 border-bottom d-flex">
+            Dashboard
+            <button
+              id="IconClose"
+              class="btn btn-outline-secondary ms-4 d-lg-none"
+            >
+              <i class="bi bi-x-lg fs-6"></i>
+            </button>
+          </h4>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a href="TatCaSanPham.html" class="nav-link"
+                ><i class="bi bi-house-door"></i> Trang chủ</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="TrangAdmin.html" class="nav-link"
+                ><i class="bi bi-people"></i> Người dùng</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="/html/Trang Admin/SanPham.html" class="nav-link"
+                ><i class="bi bi-bag"></i> Sản phẩm</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <!-- side bars end -->
+
+        <!-- Main Content start-->
+        <main class="col-md-12 ms-sm-auto px-4 col-lg-10">
+          <!-- Navbar start -->
+          <nav
+            class="navbar navbar-expand-lg navbar-light bg-light my-3 rounded shadow-sm"
+          >
+            <div class="container-fluid">
+              <button
+                class="btn btn-outline-secondary me-2 d-flex d-lg-none"
+                id="toggleSidebar"
+              >
+                <i class="bi bi-list"></i>
+              </button>
+              <a class="navbar-brand fw-bold" href="#">Admin</a>
+              <button class="BtnLogout">
+                <div class="sign">
+                  <svg viewBox="0 0 512 512">
+                    <path
+                      d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="text">Logout</div>
+              </button>
+            </div>
+          </nav>
+          <!-- Navbar end -->
+
+          <!-- profile nhân viên start -->
+          <table
+            class="table table table-hover table table-striped"
+            id="usersTable"
+          >
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Amount</th>
+                <th scope="col">IsActive</th>
+                <th scope="col">Role</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <!-- dữ liệu user sẽ được điền vào đây bởi JavaScript -->
+            </tbody>
+          </table>
+          <!-- profile nhân viên end -->
+
+          <!-- Pagination controls -->
+          <nav aria-label="Page navigation" class="mt-3">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" id="prevPageItem">
+                <button
+                  class="page-link"
+                  id="btnPrevPage"
+                  aria-label="Previous"
+                >
+                  <span aria-hidden="true">&laquo;</span> Previous
+                </button>
+              </li>
+              <li class="page-item active">
+                <span class="page-link">
+                  Trang <span id="currentPageNum">1</span> /
+                  <span id="totalPagesNum">1</span>
+                </span>
+              </li>
+              <li class="page-item" id="nextPageItem">
+                <button class="page-link" id="btnNextPage" aria-label="Next">
+                  Next <span aria-hidden="true">&raquo;</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+          <!-- Pagination controls end -->
+
+          <!-- Edit Modal Popup -->
+          <div
+            class="modal fade"
+            id="editUserModal"
+            tabindex="-1"
+            aria-labelledby="editUserModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white p-3">
+                  <h5 class="modal-title fw-bold" id="editUserModalLabel">
+                    <i class="fas fa-edit me-2"></i> Chỉnh sửa thông tin người
+                    dùng
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+
+                <div class="modal-body p-4">
+                  <div id="modalEditFormContainer">
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditFirstName"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-user-tag me-1"></i> Họ:
+                        </label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fas fa-user"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="modalEditFirstName"
+                            placeholder="Họ"
+                          />
+                        </div>
+                        <small class="form-text text-muted fst-italic"
+                          >Min 2, Max 150 ký tự</small
+                        >
+                      </div>
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditLastName"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-user-tag me-1"></i> Tên:
+                        </label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fas fa-user"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="modalEditLastName"
+                            placeholder="Tên"
+                          />
+                        </div>
+                        <small class="form-text text-muted fst-italic"
+                          >Min 2, Max 150 ký tự</small
+                        >
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditEmail"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-envelope me-1"></i> Email:
+                        </label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fas fa-at"></i
+                          ></span>
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="modalEditEmail"
+                            placeholder="Email"
+                          />
+                        </div>
+                        <small class="form-text text-muted fst-italic"
+                          >Min 6, Max 30 ký tự, email hợp lệ</small
+                        >
+                      </div>
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditPhone"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-phone me-1"></i> Điện thoại:
+                        </label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fas fa-mobile-alt"></i
+                          ></span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="modalEditPhone"
+                            placeholder="0xxx xxx xxxx hoặc +84xxx xxx xxxx"
+                          />
+                        </div>
+                        <small class="form-text text-muted fst-italic"
+                          >Định dạng: 0 hoặc +84 theo sau 9-10 chữ số</small
+                        >
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditAmount"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-wallet me-1"></i> Số dư:
+                        </label>
+                        <div class="input-group">
+                          <span class="input-group-text"
+                            ><i class="fas fa-dollar-sign"></i
+                          ></span>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="modalEditAmount"
+                            placeholder="Số dư"
+                            step="0.01"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label
+                          for="modalEditIsActive"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-toggle-on me-1"></i> Trạng thái hoạt
+                          động:
+                        </label>
+                        <select class="form-control" id="modalEditIsActive">
+                          <option value="" class="text-muted">
+                            -- Chọn --
+                          </option>
+                          <option value="true">Hoạt động</option>
+                          <option value="false">Không hoạt động</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-12">
+                        <label
+                          for="modalEditRole"
+                          class="form-label fw-semibold text-primary"
+                        >
+                          <i class="fas fa-shield-alt me-1"></i> Role:
+                        </label>
+                        <select class="form-control" id="modalEditRole">
+                          <option value="" class="text-muted">
+                            -- Không thay đổi --
+                          </option>
+                          <option value="ROLE_USER">USER</option>
+                          <option value="ROLE_ADMIN">ADMIN</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="modal-footer d-flex justify-content-end border-top p-3"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-secondary me-2"
+                    data-bs-dismiss="modal"
+                  >
+                    <i class="fas fa-times me-1"></i> Hủy
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    id="btnModalUpdate"
+                  >
+                    <i class="fas fa-check-circle me-1"></i> Lưu thay đổi
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Edit Modal Popup end -->
+
+          <div id="userDetailPanel" class="card mt-4" style="display: none">
+            <div class="card-header bg-primary text-white">
+              <h5 class="card-title mb-0">Chi tiết người dùng</h5>
+            </div>
+            <div class="card-body">
+              <!-- Search section -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="searchUsername" class="form-label"
+                    >Tìm kiếm theo Username:</label
+                  >
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="searchUsername"
+                      placeholder="Nhập username"
+                    />
+
+                    <button class="cssbuttons-io" type="button" id="btnSearch">
+                      <span>
+                        Lấy thông tin
+                        <svg
+                          viewBox="0 0 19.9 19.7"
+                          xmlns="http://www.w3.org/2000/svg"
+                          role="img"
+                          aria-labelledby="title desc"
+                          class="svg-icon search-icon"
+                        >
+                          <title>Search Icon</title>
+                          <desc id="desc">A magnifying glass icon.</desc>
+                          <g stroke="white" fill="none" class="search-path">
+                            <path
+                              d="M18.5 18.3l-5.4-5.4"
+                              stroke-linecap="square"
+                            ></path>
+                            <circle r="7" cy="8" cx="8"></circle>
+                          </g>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Display fields (read-only) -->
+              <div class="card-body">
+                <div class="row mb-3 border-bottom pb-2">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-user me-1"></i> <strong>Họ tên:</strong>
+                    </label>
+                    <p id="detailHoTen" class="fs-5 fw-bold text-dark">-</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-at me-1"></i> <strong>Username:</strong>
+                    </label>
+                    <p id="detailUsername" class="fs-5 text-dark">-</p>
+                  </div>
+                </div>
+
+                <div class="row mb-3 border-bottom pb-2">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-envelope me-1"></i>
+                      <strong>Email:</strong>
+                    </label>
+                    <p id="detailEmail" class="text-dark">-</p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-phone me-1"></i>
+                      <strong>Điện thoại:</strong>
+                    </label>
+                    <p id="detailPhone" class="text-dark">-</p>
+                  </div>
+                </div>
+
+                <div class="row mb-3 border-bottom pb-2">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-wallet me-1"></i> <strong>Số dư:</strong>
+                    </label>
+                    <p id="detailAmount" class="fs-4 fw-bolder text-success">
+                      0
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-heartbeat me-1"></i>
+                      <strong>Trạng thái:</strong>
+                    </label>
+                    <p id="detailStatus" class="fw-bold text-info">-</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="form-label text-muted small">
+                      <i class="fas fa-shield-alt me-1"></i>
+                      <strong>Role:</strong>
+                    </label>
+                    <p class="mt-1">
+                      <span id="detailRole" class="badge bg-secondary fs-6"
+                        >-</span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="d-flex">
+                <button
+                  class="BtnEdit"
+                  id="btnEditToggle"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editUserModal"
+                >
+                  Edit
+                  <svg viewBox="0 0 512 512" class="svg">
+                    <path
+                      d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"
+                    ></path>
+                  </svg>
+                </button>
+
+                <button class="cssbuttons-io-button ms-3" id="btnSetAdmin">
+                  Set Admin
+                  <div class="icon">
+                    <svg
+                      height="24"
+                      width="24"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+
+                <button class="buttonDelete ms-3" id="btnDelete">
+                  <svg viewBox="0 0 448 512" class="svgIcon">
+                    <path
+                      d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- User Detail Panel end -->
+        </main>
+        <!-- Main Content end-->
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/javascript/Admin.js"></script>
+  </body>
+</html>

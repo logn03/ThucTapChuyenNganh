@@ -26,12 +26,12 @@
           <h4 class="p-3 border-bottom">Dashboard</h4>
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a href="/html/Trang Admin/TrangAdmin.html" class="nav-link"
+              <a href="../TatCaSanPham.html" class="nav-link"
                 ><i class="bi bi-house-door"></i> Trang chủ</a
               >
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link"
+              <a href="../TrangAdmin.html" class="nav-link"
                 ><i class="bi bi-people"></i> Người dùng</a
               >
             </li>
@@ -71,43 +71,56 @@
           </nav>
 
           <!-- Table -->
-          <div class="card shadow-sm">
-            <div class="card-header bg-white fw-bold">Danh sách sản phẩm</div>
-            <div class="card-body">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Số lượng</th>
-                    <th>Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Áo thun nam</td>
-                    <td>200.000đ</td>
-                    <td>50</td>
-                    <td><span class="badge bg-success">Còn hàng</span></td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Quần jean nữ</td>
-                    <td>350.000đ</td>
-                    <td>0</td>
-                    <td><span class="badge bg-danger">Hết hàng</span></td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Giày sneaker</td>
-                    <td>1.200.000đ</td>
-                    <td>15</td>
-                    <td><span class="badge bg-warning">Sắp hết</span></td>
-                  </tr>
-                </tbody>
-              </table>
+
+          <div class="container">
+            <div class="row">
+              <div class="col-9 order-last">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Mã sản phẩm</th>
+                      <th scope="col">Tên sản phẩm</th>
+                      <th scope="col">Kích thước</th>
+                      <th scope="col">Màu sản phẩm</th>
+                      <th scope="col">Số lượng tồn kho</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Mark</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>@fat</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td colspan="2">Larry the Bird</td>
+                      <td>@twitter</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td colspan="2">Larry the Bird</td>
+                      <td>@twitter</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-3">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Áo</li>
+                  <li class="list-group-item">Quần</li>
+                  <li class="list-group-item">Phụ kiện</li>
+                  <li class="list-group-item">A fourth item</li>
+                  <li class="list-group-item">And a fifth one</li>
+                </ul>
+              </div>
             </div>
           </div>
         </main>

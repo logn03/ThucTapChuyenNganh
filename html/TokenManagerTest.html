@@ -1,0 +1,265 @@
+<!-- Test TokenManager - Mở file này trong browser để test -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Token Manager Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .test-section {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #007bff;
+        border-radius: 4px;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+      .warning {
+        color: orange;
+      }
+      button {
+        padding: 8px 15px;
+        margin: 5px;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Token Manager Test Console</h1>
+
+    <div class="test-section">
+      <h3>1. Test Token Expiration Check</h3>
+      <p>TokenManager.IsTokenExpired() - Kiểm tra token đã hết hạn hay chưa</p>
+      <button onclick="testIsTokenExpired()">Test IsTokenExpired</button>
+      <pre id="result-1"></pre>
+    </div>
+
+    <div class="test-section">
+      <h3>2. Test LocalStorage Token Setup</h3>
+      <p>Tạo sample token trong localStorage</p>
+      <button onclick="setupSampleTokens()">Setup Tokens</button>
+      <button onclick="clearTokens()">Clear Tokens</button>
+      <pre id="result-2"></pre>
+    </div>
+
+    <div class="test-section">
+      <h3>3. View Current Tokens</h3>
+      <button onclick="showTokens()">Show Tokens</button>
+      <pre id="result-3"></pre>
+    </div>
+
+    <div class="test-section">
+      <h3>4. Decode Token Payload</h3>
+      <button onclick="decodeToken()">Decode Access Token</button>
+      <pre id="result-4"></pre>
+    </div>
+
+    <div class="test-section">
+      <h3>5. Test Refresh Endpoint (Requires Backend)</h3>
+      <p>
+        <label
+          >Backend URL:
+          <input
+            type="text"
+            id="backendUrl"
+            value="http://localhost:8080"
+            style="width: 300px"
+          />
+        </label>
+      </p>
+      <button onclick="testRefreshEndpoint()">Test Refresh Endpoint</button>
+      <pre id="result-5"></pre>
+    </div>
+
+    <div class="test-section">
+      <h3>6. Test FetchWithTokenRefresh</h3>
+      <p>Test API call dengan tự động refresh token</p>
+      <label
+        >Endpoint:
+        <input
+          type="text"
+          id="testEndpoint"
+          value="/api/v1/users?page=0"
+          style="width: 300px"
+        />
+      </label>
+      <button onclick="testFetchWithTokenRefresh()">Test Fetch</button>
+      <pre id="result-6"></pre>
+    </div>
+
+    <script type="module">
+      import {
+        IsTokenExpired,
+        RefreshAccessToken,
+        FetchWithTokenRefresh,
+      } from "/javascript/TokenManager.js";
+
+      window.testIsTokenExpired = () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          document.getElementById("result-1").innerHTML =
+            '<span class="warning">⚠️ No token in localStorage</span>';
+          return;
+        }
+        const isExpired = IsTokenExpired(token);
+        document.getElementById("result-1").innerHTML =
+          `<span class="${isExpired ? "error" : "success"}">` +
+          `Token Expired: ${isExpired}</span>`;
+      };
+
+      window.setupSampleTokens = () => {
+        // Create sample tokens with exp in future
+        const futureExp = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+        const pastExp = Math.floor(Date.now() / 1000) - 3600; // 1 hour ago
+
+        // Valid token (expires in 1 hour)
+        const accessToken = createToken({
+          username: "admin",
+          exp: futureExp,
+          role: "ROLE_ADMIN",
+        });
+
+        // Refresh token (expires in 7 days)
+        const refreshToken = createToken({
+          username: "admin",
+          exp: Math.floor(Date.now() / 1000) + 604800,
+          type: "refresh",
+        });
+
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        document.getElementById("result-2").innerHTML =
+          '<span class="success">✓ Sample tokens created and stored</span>\n\n' +
+          "Access Token (expires in 1 hour):\n" +
+          accessToken +
+          "\n\n" +
+          "Refresh Token (expires in 7 days):\n" +
+          refreshToken;
+      };
+
+      window.clearTokens = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        document.getElementById("result-2").innerHTML =
+          '<span class="warning">⚠️ Tokens cleared</span>';
+      };
+
+      window.showTokens = () => {
+        const accessToken = localStorage.getItem("accessToken") || "(not set)";
+        const refreshToken =
+          localStorage.getItem("refreshToken") || "(not set)";
+        document.getElementById("result-3").innerHTML =
+          "Access Token:\n" +
+          (accessToken.length > 50
+            ? accessToken.substring(0, 50) + "..."
+            : accessToken) +
+          "\n\nRefresh Token:\n" +
+          (refreshToken.length > 50
+            ? refreshToken.substring(0, 50) + "..."
+            : refreshToken);
+      };
+
+      window.decodeToken = () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          document.getElementById("result-4").innerHTML =
+            '<span class="error">❌ No access token found</span>';
+          return;
+        }
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          document.getElementById("result-4").innerHTML =
+            '<span class="success">✓ Token Payload:</span>\n' +
+            JSON.stringify(payload, null, 2);
+        } catch (e) {
+          document.getElementById("result-4").innerHTML =
+            '<span class="error">❌ Error decoding token: ' +
+            e.message +
+            "</span>";
+        }
+      };
+
+      window.testRefreshEndpoint = async () => {
+        const backendUrl = document.getElementById("backendUrl").value;
+        try {
+          document.getElementById("result-5").innerHTML = "Testing...";
+          const refreshToken = localStorage.getItem("refreshToken");
+
+          if (!refreshToken) {
+            document.getElementById("result-5").innerHTML =
+              '<span class="error">❌ No refresh token found</span>';
+            return;
+          }
+
+          const response = await fetch(`${backendUrl}/api/v1/auth/refresh`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${refreshToken}`,
+            },
+            body: JSON.stringify({ refreshToken }),
+          });
+
+          const data = await response.json();
+          document.getElementById("result-5").innerHTML =
+            `<span class="${response.ok ? "success" : "error"}">` +
+            `Status: ${response.status}</span>\n\n` +
+            JSON.stringify(data, null, 2);
+        } catch (e) {
+          document.getElementById("result-5").innerHTML =
+            '<span class="error">❌ Error: ' + e.message + "</span>";
+        }
+      };
+
+      window.testFetchWithTokenRefresh = async () => {
+        try {
+          const backendUrl = document.getElementById("backendUrl").value;
+          const endpoint = document.getElementById("testEndpoint").value;
+          document.getElementById("result-6").innerHTML = "Testing...";
+
+          const response = await FetchWithTokenRefresh(
+            `${backendUrl}${endpoint}`
+          );
+          const data = await response.json();
+
+          document.getElementById("result-6").innerHTML =
+            `<span class="${response.ok ? "success" : "error"}">` +
+            `Status: ${response.status}</span>\n\n` +
+            JSON.stringify(data, null, 2);
+        } catch (e) {
+          document.getElementById("result-6").innerHTML =
+            '<span class="error">❌ Error: ' + e.message + "</span>";
+        }
+      };
+
+      function createToken(payload) {
+        const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+        const body = btoa(JSON.stringify(payload));
+        const signature = "test_signature"; // For testing only
+        return `${header}.${body}.${signature}`;
+      }
+    </script>
+  </body>
+</html>

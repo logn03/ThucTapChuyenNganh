@@ -64,34 +64,33 @@ a {
     justify-content: center;
     display: flex;
     gap: 40px;
-
+    padding: 10px;
 }
 
 .Navigation-menu-contents ul li {
     margin-right: 24px;
     display: inline-block;
+       font-size: 16px;
 }
 
 .Navigation-menu-contents ul li i {
-    font-size: 12px;
+    font-size: 16px;
 }
 
-/* giỏ hàng */
-.Navigation-menu-cart {
-    position: relative;
+
+.Navigation-menu-cart-user ul li {
+    display: inline-block;
+    margin-right: 14px;
+    font-size: 20px;
 }
 
-#CartCount {
-    position: absolute;
-    top: -10px;
-    right: -16px;
-    background-color: rgb(179, 57, 57);
-    color: #F0F0F0;
-    padding: 5px 7px;
-    font-size: 10px;
-    border-radius: 50%;
+.Navigation-menu-contents a i {
+  display: inline-block; 
+  transition: transform 0.3s ease;
 }
-
+.Navigation-menu-contents ul li:hover a i{
+  transform: rotate(90deg);
+}
 
 
 .Navigation-menu-cart-user ul li {
@@ -110,23 +109,47 @@ a {
 }
 
 /* button dang nhap dang ky start */
-.Navigation-menu-user-normal {
-    gap: 10px;
-    align-items: center;
-}
+/* From Uiverse.io by vikiWayne */ 
 
 .btn-user {
-    padding: 6px 12px;
-    border: 1px solid #333;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-    transition: 0.2s;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #000000;
+  transition: all 1000ms;
+  font-size: 15px;
+  position: relative;
+  overflow: hidden;
+  outline: 2px solid #000000;
+  margin-right: 10px;
+  margin-left: 15px;
 }
 
 .btn-user:hover {
-    background: #333;
-    color: white;
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid #000000;
+  box-shadow: 4px 5px 17px -4px #000000;
+}
+
+.btn-user::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: #000000;
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+}
+
+.btn-user:hover::before {
+  width: 250%;
 }
 
 /* button dang nhap dang ky end */
@@ -175,48 +198,6 @@ a {
 
 
 /* propmenu dang ky dang nhap end*/
-
-/* Thanh tìm kiếm cho mobile end */
-.Navigation-menu-search {
-    padding: 14px 16px;
-    color: rgba(0, 0, 0, 0.4);
-    position: relative;
-}
-
-#Search-Mobile {
-    position: absolute;
-    top: 80px;
-    width: 200px;
-    height: 40px;
-    border-radius: 12px;
-    padding-left: 10px;
-    z-index: 9;
-    display: none;
-}
-
-#Search-Mobile.active {
-    display: flex;
-}
-
-.Navigation-menu-search input {
-    position: relative;
-    background-color: #F0F0F0;
-    padding-left: 40px;
-    width: 277px;
-    height: 38px;
-    border: none;
-    border-radius: 62px;
-}
-
-.Navigation-menu-search i {
-    font-size: 17px;
-    padding-left: 10px;
-    align-self: center;
-    position: absolute;
-    z-index: 1;
-}
-
-/* Thanh tìm kiếm cho mobile end*/
 
 /* PropMenu Navigation start */
 .Navigation-menu-contents {
@@ -680,16 +661,6 @@ hr {
     line-height: 45px;
 }
 
-.container-3-button {
-    padding-left: 130px;
-    padding-bottom: 30px;
-}
-
-.container-3-button li input {
-    width: 349px;
-    height: 48px;
-    border-radius: 62px;
-}
 
 .container-3-email input {
     position: relative;
@@ -721,65 +692,6 @@ hr {
 
 
 /* footer end */
-
-/* Navigation menu mobile srart */
-
-.Humberger-icon i {
-    font-size: 24px;
-    position: relative;
-    display: none;
-}
-
-#Humberger-menu-mobile {
-    width: 70%;
-    background-color: #4c4c4c;
-    z-index: 5;
-    position: absolute;
-    top: 1;
-    left: 0;
-    right: 0;
-    font-size: 20px;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-}
-
-#Humberger-menu-mobile.active {
-    transform: translateX(0);
-}
-
-.Humberger-Submenu-Mobile {
-    display: none;
-}
-
-.Humberger-Submenu-Mobile.active {
-    display: block;
-}
-
-
-
-#Humberger-menu-mobile a {
-    text-decoration: none;
-    color: #f5f5f5;
-    padding-left: 30px;
-
-}
-
-#Humberger-menu-mobile li {
-    padding: 20px;
-    border-bottom: solid #f5f5f5;
-}
-
-#Humberger-menu-mobile li a i {
-    float: right;
-    display: inline-flex;
-    transition: transform 0.3s ease;
-}
-
-#Humberger-menu-mobile li a i.xoay {
-    transform: rotate(90deg);
-}
-
-
 
 /* Navigation menu mobile end */
 #overlay {
@@ -1011,7 +923,7 @@ hr {
         transition: transform 0.3s ease;
         z-index: 99;
         position: absolute;
-        top: 120px;
+        top: 105px;
         left: 0;
         width: 250px;
         height: 100vh;
@@ -1174,10 +1086,6 @@ hr {
         height: auto;
         display: block;
         padding: 10px;
-    }
-
-    .container-3-button {
-        padding: 10px 10px;
     }
 
     .footer-contents {
@@ -1362,9 +1270,6 @@ hr {
         padding-left: 50px;
     }
 
-    .container-3-button {
-        padding-left: 10px;
-    }
 
     .footer-contents {
         font-size: 20px;
@@ -1538,10 +1443,6 @@ hr {
 
     .container-3-email input {
         padding-left: 50px;
-    }
-
-    .container-3-button {
-        padding-left: 10px;
     }
 
     .footer-contents {
