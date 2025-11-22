@@ -702,4 +702,25 @@ if (role) {
     }
   };
 
+
+
+  function StartAutoRefreshToken() {
+  setInterval(async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) return;
+
+    // Nếu token hết hạn trong 1 phút nữa → tự refresh
+    const exp = IsTokenExpired(accessToken, 60); // 60 giây
+
+    if (exp) {
+      console.log("🔄 Access token gần hết hạn — đang làm mới...");
+      await RefreshAccessToken();
+    }
+  }, 30000); // kiểm tra mỗi 30 giây
+}
+
+StartAutoRefreshToken();
 })();
+
+
+
