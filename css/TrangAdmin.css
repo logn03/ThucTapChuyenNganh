@@ -270,3 +270,233 @@
          }
 
      }
+
+/* css trang sản phẩm */
+/* From Uiverse.io by CristianMontoya98 */ 
+.btnDl {
+ width: 6.5em;
+ height: 2.3em;
+ margin: 0.5em;
+ background: rgb(255, 0, 0);
+ color: white;
+ border: none;
+ border-radius: 0.625em;
+ font-size: 14px;
+ font-weight: bold;
+ cursor: pointer;
+ position: relative;
+ z-index: 1;
+ overflow: hidden;
+}
+
+.btnDl:hover {
+ color: black;
+}
+
+.btnDl:after {
+ content: "";
+ background: rgb(255, 255, 255);
+ color: #000;
+ position: absolute;
+ z-index: -1;
+ left: -20%;
+ right: -20%;
+ top: 0;
+ bottom: 0;
+ transform: skewX(-45deg) scale(0, 1);
+ transition: all 0.5s;
+}
+
+.btnDl:hover:after {
+ transform: skewX(-45deg) scale(1, 1);
+ -webkit-transition: all 0.5s;
+ transition: all 0.5s;
+}
+
+
+
+/* css nut edit */
+.btnEd {
+ width: 6.5em;
+ height: 2.3em;
+ margin: 0.5em;
+ background: rgb(0, 153, 255);
+ color: white;
+ border: none;
+ border-radius: 0.625em;
+ font-size: 14px;
+ font-weight: bold;
+ cursor: pointer;
+ position: relative;
+ z-index: 1;
+ overflow: hidden;
+}
+
+.btnEd:hover {
+ color: black;
+}
+
+.btnEd:after {
+ content: "";
+ background: rgb(255, 255, 255);
+ color: #000;
+ position: absolute;
+ z-index: -1;
+ left: -20%;
+ right: -20%;
+ top: 0;
+ bottom: 0;
+ transform: skewX(-45deg) scale(0, 1);
+ transition: all 0.5s;
+}
+
+.btnEd:hover:after {
+ transform: skewX(-45deg) scale(1, 1);
+ -webkit-transition: all 0.5s;
+ transition: all 0.5s;
+}
+
+/* css nút thêm mới  */
+/* From Uiverse.io by Shakil-Babu */ 
+.btn-success {
+ background-color: #00BFA6;
+ padding: 10px 30px;
+ color: #fff;
+ text-transform: uppercase;
+ letter-spacing: 2px;
+ cursor: pointer;
+ border-radius: 10px;
+ border: 2px dashed #00BFA6;
+ box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+ transition: .4s;
+}
+
+.btn-success span:last-child {
+ display: none;
+}
+
+.btn-success:hover {
+ transition: .4s;
+ border: 2px dashed #00BFA6;
+ background-color: #fff;
+ color: #00BFA6;
+}
+
+.btn-success:active {
+ background-color: #87dbd0;
+}
+
+/* css nút đăng xuất */
+/* From Uiverse.io by vinodjangid07 */ 
+.btn-user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(255, 65, 65);
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: white;
+}
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: .3s;
+}
+/* hover effect on button width */
+.btn-user:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.btn-user:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 20px;
+}
+/* hover effect button's text */
+.btn-user:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.btn-user:active {
+  transform: translate(2px ,2px);
+}
+
+
+
+/* css nút hủy của form thêm mới danh mục */
+/* From Uiverse.io by Madflows */ 
+.btn-cancel {
+  position: relative;
+  overflow: hidden;
+  height: 3rem;
+  padding: 0 2rem;
+  border-radius: 1rem;
+  background: #3d3a4e;
+  background-size: 400%;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel:hover::before {
+  transform: scaleX(1);
+}
+
+.btn-cancel span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-cancel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  width: 100%;
+  height: inherit;
+  border-radius: inherit;
+  background: linear-gradient(
+    82.3deg,
+    rgb(98, 97, 100) 10.8%,
+    rgb(115, 114, 122) 94.3%
+  );
+  transition: all 0.475s;
+}
+
+
