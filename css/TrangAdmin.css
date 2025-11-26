@@ -500,3 +500,9 @@
 }
 
 
+#categorySidebar .collapse {
+  display: none;
+}
+#categorySidebar .collapse.show {
+  display: block;
+}

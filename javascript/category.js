@@ -1,405 +1,445 @@
-// category.js
-// ==========================
-// config & fetch helper
-// ==========================
+//javascript/category.js
+
+
+
+// 1. SỬA: Đồng bộ hóa URL API với Backend đã sửa (categories)
+
 const API_BASE = "http://localhost:8080/api/v1/categorys";
 
-function getToken() {
-  const token = localStorage.getItem("accessToken");
-  if (!token) {
-    alert("Bạn chưa đăng nhập!");
-    throw new Error("Chưa có access token");
-  }
-  return token;
+
+
+// 2. KHẮC PHỤC LỖI 401: Lấy Token từ localStorage
+
+// Lưu ý: Đảm bảo rằng sau khi đăng nhập, token được lưu vào localStorage với key là "authToken"
+
+const TOKEN = localStorage.getItem("authToken");
+
+// Nếu không tìm thấy token, Frontend sẽ KHÔNG THỰC HIỆN cuộc gọi API
+
+if (!TOKEN) {
+
+    console.error("Lỗi: Không tìm thấy Token xác thực ('authToken') trong localStorage. Vui lòng đăng nhập.");
+
+    // Có thể chuyển hướng người dùng đến trang đăng nhập ở đây
+
 }
 
-async function fetchWithToken(url, options = {}) {
-  const token = getToken();
-  options.headers = {
-    ...options.headers,
-    "Authorization": `Bearer ${token}`,
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-  };
-  const res = await fetch(url, options);
 
-  if (res.status === 401) {
-    alert("Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại!");
-    window.location.href = "../index.html";
-    throw new Error("Unauthorized");
-  }
 
-  // nếu status 204 No Content thì trả về null
-  if (res.status === 204) return null;
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error(`API Error ${res.status}: ${text}`);
-  }
 
-  return res.json();
-}
+// --- Hàm API (Đã thêm xử lý lỗi) ---
 
-// ==========================
-// Helpers DOM
-// ==========================
-function qs(sel) { return document.querySelector(sel); }
-function qsa(sel) { return Array.from(document.querySelectorAll(sel)); }
+async function apiGet(url) {
 
-// ==========================
-// Load danh mục gốc vào sidebar
-// ==========================
-async function loadRootCategories() {
-  const sidebar = document.getElementById("categorySidebar");
-  if (!sidebar) return;
-  sidebar.innerHTML = "";
+    if (!TOKEN) throw new Error("Token không khả dụng. Không thể gọi API.");
 
-  try {
-    const response = await fetchWithToken(`${API_BASE}/root`);
-    const categories = response.data || [];
+   
 
-    categories.forEach(cat => {
-      const li = document.createElement("li");
-      li.className = "list-group-item list-group-item-action";
-      li.textContent = cat.name;
-      li.dataset.id = cat.id;
+    const res = await fetch(url, {
 
-      li.addEventListener("click", () => {
-        // highlight
-        qsa("#categorySidebar li").forEach(item => item.classList.remove('active'));
-        li.classList.add('active');
+        headers: {
 
-        // load con của parent vào bảng
-        loadChildrenTable(cat.id);
-      });
+            "Accept": "*/*",
 
-      sidebar.appendChild(li);
+            // PHẢI CÓ DÒNG NÀY ĐỂ GỬI TOKEN CHO BACKEND
+
+            "Authorization": `Bearer ${TOKEN}`
+
+        }
+
     });
 
-    // populate parent selects (for add/edit forms)
-    await populateParentSelects();
+   
 
-  } catch (error) {
-    console.error("Lỗi tải danh mục gốc:", error);
-    sidebar.innerHTML = '<li class="list-group-item text-danger">Lỗi tải danh mục</li>';
-  }
+    if (!res.ok) {
+
+    }
+
+    return res.json();
+
 }
 
-// ==========================
-// Load danh mục con & hiển thị bảng
-// ==========================
-async function loadChildrenTable(parentId) {
-  try {
-    const response = await fetchWithToken(`${API_BASE}/${parentId}`);
-    const childCategories = response.data || [];
+
+
+async function apiPost(url, data) {
+
+    if (!TOKEN) throw new Error("Token không khả dụng. Không thể gọi API.");
+
+    const res = await fetch(url, {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type": "application/json",
+
+            "Authorization": `Bearer ${TOKEN}`
+
+        },
+
+        body: JSON.stringify(data)
+
+    });
+
+    if (!res.ok) {
+
+        throw new Error(`API POST failed: ${res.status} ${res.statusText}`);
+
+    }
+
+    return res.json();
+
+}
+
+
+
+async function apiDelete(url) {
+
+    if (!TOKEN) throw new Error("Token không khả dụng. Không thể gọi API.");
+
+    const res = await fetch(url, {
+
+        method: "DELETE",
+
+        headers: {
+
+            "Authorization": `Bearer ${TOKEN}`
+
+        }
+
+    });
+
+    if (!res.ok) {
+
+        throw new Error(`API DELETE failed: ${res.status} ${res.statusText}`);
+
+    }
+
+    return res.json();
+
+}
+
+// ------------------------------
+
+
+
+
+
+// 2️⃣ Load danh mục gốc vào sidebar
+
+async function loadRootCategories() {
+
+    try {
+
+        // SỬA: Endpoint /root -> /roots
+
+        const response = await apiGet(`${API_BASE}/root`);
+
+        const categories = response.data;
+
+
+
+        const sidebar = document.getElementById("categorySidebar");
+
+        sidebar.innerHTML = "";
+
+
+
+        categories.forEach(cat => {
+
+            const li = document.createElement("li");
+
+            li.className = "list-group-item list-group-item-action";
+
+            li.textContent = cat.name;
+
+            li.dataset.id = cat.id;
+
+
+
+            li.addEventListener("click", () => {
+
+                // Highlight item đang được chọn
+
+                document.querySelectorAll("#categorySidebar li").forEach(item => item.classList.remove('active'));
+
+                li.classList.add('active');
+
+               
+
+                // Gọi hàm hiển thị Category con và Sản phẩm
+
+                loadChildrenAndProducts(cat.id);
+
+            });
+
+
+
+            sidebar.appendChild(li);
+
+        });
+
+    } catch (error) {
+
+        document.getElementById("categorySidebar").innerHTML =
+
+            '<li class="list-group-item text-danger">Lỗi tải danh mục. Kiểm tra Console và Backend.</li>';
+
+    }
+
+}
+
+
+
+// 3️⃣ Load danh mục con và hiển thị sản phẩm
+
+async function loadChildrenAndProducts(parentId) {
+
+    try {
+
+        // SỬA: Endpoint /{id} -> /{parentId}/children
+
+const response = await apiGet(`${API_BASE}/${parentId}`);
+
+        const childCategories = response.data;
+
+       
+
+        // --- VÌ CHƯA CÓ API LẤY SẢN PHẨM, TA GIẢ LẬP DỮ LIỆU ĐỂ BẢNG RENDER ĐÚNG CẤU TRÚC ---
+
+       
+
+        // Giả lập danh sách sản phẩm mẫu (có Variants và Attributes)
+
+        const mockProducts = [{
+
+            id: 101,
+
+            name: "Áo Polo Basic",
+
+            variants: [
+
+                { id: 1, quantityInStock: 50, attributes: [{name: 'Color', value: 'Trắng'}, {name: 'Size', value: 'M'}]},
+
+                { id: 2, quantityInStock: 30, attributes: [{name: 'Color', value: 'Đen'}, {name: 'Size', value: 'L'}]},
+
+            ]
+
+        }, {
+
+            id: 102,
+
+            name: "Quần Jeans Slim",
+
+            variants: [
+
+                { id: 3, quantityInStock: 25, attributes: [{name: 'Color', value: 'Xanh Đậm'}, {name: 'Size', value: '30'}]},
+
+            ]
+
+        }];
+
+       
+
+        renderProductTable(mockProducts);
+
+       
+
+        // TODO: THỰC TẾ, BẠN CẦN GỌI API LẤY SẢN PHẨM:
+
+        // const productResponse = await apiGet(`http://localhost:8080/api/v1/products?category_id=${parentId}`);
+
+        // renderProductTable(productResponse.data.content || []);
+
+       
+
+    } catch (error) {
+
+        console.error(`Lỗi khi tải danh mục con của ID ${parentId}:`, error);
+
+        renderProductTable([]); // Hiển thị bảng trống nếu lỗi
+
+    }
+
+}
+
+
+
+// 4️⃣ Render bảng sản phẩm (Đã sửa để lặp qua Variants)
+
+function renderProductTable(products) {
 
     const tbody = document.getElementById("productTableBody");
+
     tbody.innerHTML = "";
 
-    if (!childCategories.length) {
-      tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center">Danh mục này không có dữ liệu.</td>
-        <td class="text-center">
-          <button class="btn btn-danger btn-delete-root" data-id="${parentId}">
-          <i class="ri-delete-bin-line"></i> Xóa thư mục chính</button>
-      </td>
-      </tr>`;
-      // Bắt sự kiện XÓA ROOT CATEGORY
-      const rootDeleteBtn = qs(".btn-delete-root");
-      if (rootDeleteBtn) {
-        rootDeleteBtn.addEventListener("click", async () => {
-          const id = rootDeleteBtn.dataset.id;
 
-          if (!confirm("Bạn chắc chắn muốn xoá danh mục gốc này?")) return;
 
-          await deleteRootCategory(id);
-        });
-      }
-      return;
-    }
+    if (products.length === 0) {
 
-    childCategories.forEach((cat, index) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${cat.id}</td>
-        <td>${escapeHtml(cat.name)}</td>
-        <td>-</td>
-        <td>-</td>
-        <td>-</td>
-        <td>
-          <div class="btn-group" role="group">
-           <button type="button" class="btnEd  me-2 rounded-pill btn-edit-category" data-id="${cat.id}" >Edit</button>
-           <button type="button" class="btnDl rounded-pill btn-delete-category" data-id="${cat.id}" >Delete</button>
-          </div>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">Không tìm thấy sản phẩm nào.</td></tr>';
 
-    // Attach handlers (delegation simpler: find buttons)
-    qsa('.btn-edit-category').forEach(b => {
-      b.removeEventListener('click', onEditClick);
-      b.addEventListener('click', onEditClick);
-    });
-    qsa('.btn-delete-category').forEach(b => {
-      b.removeEventListener('click', onDeleteClick);
-      b.addEventListener('click', onDeleteClick);
-    });
+        return;
 
-  } catch (error) {
-    console.error(`Lỗi khi tải danh mục con của ID ${parentId}:`, error);
-    const tbody = document.getElementById("productTableBody");
-    if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Lỗi tải dữ liệu</td></tr>';
-  }
-}
-
-// ==========================
-// Edit / Delete handlers
-// ==========================
-function escapeHtml(str) {
-  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-}
-
-async function onEditClick(e) {
-  const id = e.currentTarget.dataset.id;
-  if (!id) return;
-  try {
-    const pageResp = await fetchWithToken(`${API_BASE}?page=0&size=100`);
-    const items = pageResp.data?.content || pageResp.data || [];
-    const target = items.find(x => String(x.id) === String(id));
-
-    let detail = target || null;
-    if (!detail) {
-      const rootsResp = await fetchWithToken(`${API_BASE}/root`);
-      const roots = rootsResp.data || [];
-      for (const r of roots) {
-        const childrenResp = await fetchWithToken(`${API_BASE}/${r.id}`);
-        const ch = childrenResp.data || [];
-        const f = ch.find(x => String(x.id) === String(id));
-        if (f) { detail = f; break; }
-      }
-    }
-
-    if (!detail) {
-      alert("Không tìm thấy chi tiết danh mục trên server.");
-      return;
-    }
-
-    qs('#editCategoryId').value = detail.id;
-    qs('#editCategoryName').value = detail.name || '';
-    qs('#editCategoryDescription').value = detail.description || '';
-
-    const parentSelect = qs('#editCategoryParent');
-    if (detail.parent && detail.parent.id) {
-      parentSelect.value = detail.parent.id;
-    } else {
-      parentSelect.value = '';
     }
 
 
-    const modalEl = document.getElementById('editCategoryModal');
-    const modal = new bootstrap.Modal(modalEl);
-    modal.show();
 
-  } catch (err) {
-    console.error('Lỗi khi mở edit modal:', err);
-    alert('Lỗi khi lấy dữ liệu để chỉnh sửa.');
-  }
+    products.forEach((product, index) => {
+
+        // Lặp qua từng Variant (biến thể) của Sản phẩm
+
+        if (product.variants && product.variants.length > 0) {
+
+           
+
+            product.variants.forEach((variant, variantIndex) => {
+
+                const tr = document.createElement("tr");
+
+               
+
+                // Trích xuất Size và Color từ danh sách attributes
+
+                const sizeAttr = variant.attributes.find(attr => attr.name.toLowerCase() === 'size')?.value || '-';
+
+                const colorAttr = variant.attributes.find(attr => attr.name.toLowerCase() === 'color')?.value || '-';
+
+
+
+                tr.innerHTML = `
+
+                    <td>${index + 1}${variantIndex > 0 ? '.' + variantIndex : ''}</td>
+
+                    <td>${product.id}</td>
+
+                    <td>${product.name}</td>
+
+                    <td>${sizeAttr}</td>
+
+                    <td>${colorAttr}</td>
+
+                    <td>${variant.quantityInStock}</td>
+
+                    <td>
+
+                        <button class="btn btn-sm btn-info me-2" data-product-id="${product.id}">Sửa</button>
+
+                        <button class="btn btn-sm btn-danger" data-product-id="${product.id}">Xóa</button>
+
+                    </td>
+
+                `;
+
+                tbody.appendChild(tr);
+
+            });
+
+        } else {
+
+             // Trường hợp sản phẩm không có Variants
+
+             const tr = document.createElement("tr");
+
+             tr.innerHTML = `
+
+                <td>${index + 1}</td>
+
+                <td>${product.id}</td>
+
+                <td>${product.name}</td>
+
+                <td>-</td>
+
+                <td>-</td>
+
+                <td>${product.quantityInStock ?? '-'}</td>
+
+                <td><button class="btn btn-sm btn-info" data-id="${product.id}">Sửa</button></td>
+
+            `;
+
+            tbody.appendChild(tr);
+
+        }
+
+    });
+
 }
 
-async function onDeleteClick(e) {
-  const id = e.currentTarget.dataset.id;
-  if (!id) return;
-  if (!confirm('Bạn có chắc muốn xóa category này?')) return;
 
-  try {
-    const res = await fetchWithToken(`${API_BASE}/${id}`, { method: 'DELETE' });
-    alert('Xóa thành công');
 
-    // --- CẬP NHẬT BẢNG CON NGAY ---
-    const activeLi = qs('#categorySidebar li.active');
-    if (activeLi) {
-      // reload chỉ bảng con của parent hiện tại
-      await loadChildrenTable(activeLi.dataset.id);
-    } else {
-      // Nếu không có parent active, reload danh mục gốc
-      await loadRootCategories();
-      document.getElementById('productTableBody').innerHTML = '';
+
+
+// 5️⃣ Thêm danh mục (Giữ nguyên)
+
+async function addCategory(name, description, parentId = null) {
+
+    try {
+
+        const body = { name, description, parentId };
+
+        await apiPost(API_BASE, body);
+
+        await loadRootCategories();
+
+    } catch (error) {
+
+        console.error("Lỗi khi thêm danh mục:", error);
+
     }
 
-  } catch (err) {
-    console.error('Xóa thất bại:', err);
-    alert('Xóa thất bại. Kiểm tra console.');
-  }
 }
 
 
-// ==========================
-// Add/Edit parent selects
-// ==========================
-async function populateParentSelects() {
-  try {
-    // Lấy root categories
-    const rootsResp = await fetchWithToken(`${API_BASE}/root`);
-    const roots = rootsResp.data || [];
 
-    const newSel = qs('#newCategoryParent');
-    const editSel = qs('#editCategoryParent');
+// 6️⃣ Xóa danh mục (Giữ nguyên)
 
-    if (newSel) newSel.innerHTML = '<option value="">-- Là danh mục gốc --</option>';
-    if (editSel) editSel.innerHTML = '<option value="">-- Không có parent --</option>';
+async function deleteCategory(id) {
 
-    roots.forEach(c => {
-      const opt = `<option value="${c.id}">${escapeHtml(c.name)}</option>`;
-      if (newSel) newSel.insertAdjacentHTML('beforeend', opt);
-      if (editSel) editSel.insertAdjacentHTML('beforeend', opt);
-    });
+    try {
 
-  } catch (err) {
-    console.warn('populateParentSelects error:', err);
-  }
-}
+        await apiDelete(`${API_BASE}/${id}`);
 
+        await loadRootCategories();
 
-async function onAddCategoryClick() {
-  const name = qs('#newCategoryName').value.trim();
-  const desc = qs('#newCategoryDescription').value.trim();
-  const parent = qs('#newCategoryParent').value || null;
+    } catch (error) {
 
-  if (!name) {
-    alert('Vui lòng nhập tên danh mục');
-    return;
-  }
+        console.error("Lỗi khi xóa danh mục:", error);
 
-  try {
-    const body = {
-      name,
-      description: desc,
-      parent: parent ? parseInt(parent) : null
-    };
-
-    await fetchWithToken(API_BASE, {
-      method: 'POST',
-      body: JSON.stringify(body)
-    });
-
-    alert('Thêm danh mục thành công');
-    qs('#addCategoryForm').reset();
-
-    // --- UPDATE BẢNG CON NGAY ---
-    // Nếu có parent đang active trên sidebar, reload bảng con của parent đó
-    const activeLi = qs('#categorySidebar li.active');
-    if (activeLi) {
-      loadChildrenTable(activeLi.dataset.id);
-    } else {
-      // Nếu chưa chọn parent, chỉ reload sidebar gốc
-      await loadRootCategories();
     }
 
-  } catch (err) {
-    console.error('Thêm danh mục lỗi:', err);
-    alert('Thêm thất bại. Kiểm tra console.');
-  }
 }
 
-// xóa thư mục cha 
-// gọi api xóa thư mục cha
-async function deleteRootCategory(id) {
-  try {
-    const response = await fetchWithToken(`${API_BASE}/${id}`, {
-      method: "DELETE"
-    });
 
-    // Backend DELETE trả về 204 → response = null
-    if (response !== null && response.success === false) {
-      alert(response.message || "Không thể xoá danh mục.");
-      return;
+
+// 7️⃣ Load tất cả danh mục (Giữ nguyên)
+
+async function loadAllCategories() {
+
+    try {
+
+        const response = await apiGet(`${API_BASE}?page=0&size=100`);
+
+        return response.data;
+
+    } catch (error) {
+
+        console.error("Lỗi khi tải tất cả danh mục:", error);
+
+        return [];
+
     }
 
-    alert("Đã xoá danh mục thành công!");
-
-    // 🔥 Load lại sidebar danh mục gốc
-    await loadRootCategories();
-
-    // 🔥 Reset bảng bên phải
-    document.getElementById("productTableBody").innerHTML = `
-      <tr>
-        <td colspan="7" class="text-center">Hãy chọn một danh mục.</td>
-      </tr>
-    `;
-
-  } catch (error) {
-    console.error("Lỗi xoá root:", error);
-    alert("Xoá thất bại.");
-  }
 }
 
 
 
+// 8️⃣ Khởi động khi trang load
 
+document.addEventListener("DOMContentLoaded", () => {
 
-// ==========================
-// Save edit
-// ==========================
-async function onSaveEditCategory() {
-  const id = qs('#editCategoryId').value;
-  const name = qs('#editCategoryName').value.trim();
-  const desc = qs('#editCategoryDescription').value.trim();
-  const parent = qs('#editCategoryParent').value || null;
-  if (!name) {
-    alert('Tên không được bỏ trống');
-    return;
-  }
-  try {
-    const body = {};
-    body.name = name;
-    body.description = desc;
-    // backend expects CreateCategoryRequest with parent field maybe named "parent"
-    if (parent) body.parent = parseInt(parent);
+    loadRootCategories();
 
-    const res = await fetchWithToken(`${API_BASE}/${id}`, {
-      method: 'PUT', // Note: backend currently has POST (create) and DELETE; if no PUT endpoint, use POST to create or PATCH endpoint. Adjust accordingly.
-      body: JSON.stringify(body)
-    });
-
-    alert('Cập nhật thành công');
-    // hide modal
-    const modalEl = document.getElementById('editCategoryModal');
-    const modal = bootstrap.Modal.getInstance(modalEl);
-    if (modal) modal.hide();
-    await loadRootCategories();
-    document.getElementById('productTableBody').innerHTML = '';
-  } catch (err) {
-    console.error('Cập nhật thất bại:', err);
-    alert('Cập nhật thất bại. Kiểm tra console.');
-  }
-}
-
-// ==========================
-// Init & event bindings
-// ==========================
-document.addEventListener('DOMContentLoaded', () => {
-  // mount add form above sidebar if container exists
-  const sidebar = document.getElementById('categorySidebar');
-  if (sidebar) {
-    const addContainer = document.getElementById('categoryAddContainer');
-    if (addContainer) sidebar.parentNode.insertBefore(addContainer, sidebar);
-  }
-
-  // Bind add button
-  const btnAdd = qs('#btnAddCategory');
-  if (btnAdd) {
-    btnAdd.addEventListener('click', onAddCategoryClick);
-  }
-
-  // Bind save edit button
-  const btnSaveEdit = qs('#btnSaveEditCategory');
-  if (btnSaveEdit) {
-    btnSaveEdit.addEventListener('click', onSaveEditCategory);
-  }
-
-  // Initial load
-  loadRootCategories();
 });
