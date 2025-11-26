@@ -1,9 +1,8 @@
-// category.js - FINAL VERSION
+// category.js - FINAL VERSION (Cập nhật logic EDIT sản phẩm)
 // ==========================
 // Config & fetch helper
 // ==========================
 const API_BASE = "http://localhost:8080/api/v1/categorys";
-// Đã điều chỉnh để khớp với Swagger/Postman: /api/products
 const PRODUCT_API = "http://localhost:8080/api/products"; 
 
 function getToken() {
@@ -93,18 +92,87 @@ function openAddProductForm(categoryId) {
   btnVariant?.click();
 }
 
+/**
+ * Mở modal chỉnh sửa sản phẩm (Chỉ cho phép sửa Tên, Mô tả, Giá cơ bản)
+ */
+async function openEditProductModal(productId) {
+    const modalEl = qs("#editProductModal");
+    const modal = new bootstrap.Modal(modalEl);
+    
+    // Đảm bảo nút Save/Update được cập nhật listener mới nhất
+    const btnSaveProduct = qs("#btnSaveProduct");
+    // Clone nút để xóa tất cả các listener cũ
+    const newBtnSaveProduct = btnSaveProduct.cloneNode(true);
+    btnSaveProduct.replaceWith(newBtnSaveProduct);
+
+    try {
+        // 1. Lấy dữ liệu sản phẩm
+        const res = await fetchWithToken(`${PRODUCT_API}/${productId}`);
+        const p = res.data;
+
+        // 2. Điền dữ liệu vào form EDIT
+        qs("#editName").value = p.name ?? "";
+        qs("#editDescription").value = p.description ?? "";
+        qs("#editBasePrice").value = p.baseprice ?? "";
+        
+        // Các trường bị khóa (Category Name)
+        qs("#editCategoryName").value = p.categoryName ?? "Không rõ";
+
+        // Gắn ID sản phẩm và Category ID
+        newBtnSaveProduct.setAttribute("data-product-id", productId);
+        newBtnSaveProduct.setAttribute("data-category-id", p.categoryId); 
+        
+        // Ẩn/hiện modal
+        modal.show();
+
+        // 3. Xử lý sự kiện LƯU (PUT request)
+        newBtnSaveProduct.addEventListener("click", async () => {
+            const updatedName = qs("#editName").value.trim();
+            const updatedDescription = qs("#editDescription").value.trim();
+            const updatedBasePrice = parseFloat(qs("#editBasePrice").value) || 0;
+            const categoryId = parseInt(newBtnSaveProduct.getAttribute("data-category-id"));
+            
+            if (!updatedName) return alert("Tên sản phẩm không được để trống!");
+            if (updatedBasePrice <= 0) return alert("Giá cơ bản phải lớn hơn 0!");
+
+            // Chỉ gửi 3 trường được phép sửa
+            const reqBody = {
+                name: updatedName,
+                description: updatedDescription,
+                baseprice: updatedBasePrice
+            };
+
+            try {
+                await fetchWithToken(`${PRODUCT_API}/${productId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(reqBody)
+                });
+                alert("Cập nhật sản phẩm thành công!");
+                modal.hide();
+                // Load lại danh sách sản phẩm của danh mục hiện tại
+                loadProductsByCategory(categoryId); 
+            } catch (err) {
+                console.error(err);
+                alert("Cập nhật thất bại! Vui lòng kiểm tra console.");
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        alert("Lỗi tải dữ liệu sản phẩm để chỉnh sửa");
+        modal.hide();
+    }
+}
+
 
 // ==========================
-// Lắng nghe sự kiện FORM SẢN PHẨM
+// Lắng nghe sự kiện FORM SẢN PHẨM (THÊM MỚI)
 // ==========================
 
-// Thêm variant (Đã thêm trường SKU, Price, Stock, Size, Color)
-// Trong file category.js
-
+// Thêm variant
 qs("#btnAddVariant")?.addEventListener("click", () => {
   const container = qs("#variantContainer"); 
   const div = document.createElement("div");
-  // Thêm class 'd-flex' và 'gap-2' để canh chỉnh đẹp hơn
   div.className = "mb-2 d-flex gap-2 flex-wrap align-items-center"; 
   div.innerHTML = `
     <input type="text" class="form-control variantSize" style="flex: 1 1 15%" placeholder="Size (M, L)" required>
@@ -114,10 +182,8 @@ qs("#btnAddVariant")?.addEventListener("click", () => {
     <input type="text" class="form-control variantSku" style="flex: 1 1 25%" placeholder="SKU (Mã Variant)">
     <button type="button" class="btn btn-danger btn-sm btnRemoveVariant" style="flex: 0 0 5%">Xóa</button>
   `;
-  // Lệnh quan trọng: Thêm phần tử mới vào container
   container.appendChild(div);
 
-  // Lắng nghe sự kiện Xóa
   div.querySelector(".btnRemoveVariant")?.addEventListener("click", () => div.remove());
 });
 
@@ -135,7 +201,7 @@ qs("#btnAddImage")?.addEventListener("click", () => {
   div.querySelector(".btnRemoveImage")?.addEventListener("click", () => div.remove());
 });
 
-// Gửi tạo sản phẩm (Đã cập nhật logic thu thập biến thể và SKU)
+// Gửi tạo sản phẩm
 qs("#btnSubmitProduct")?.addEventListener("click", async () => {
   const categoryId = parseInt(qs("#productCategoryId").value);
   const name = qs("#productName").value.trim();
@@ -147,7 +213,7 @@ qs("#btnSubmitProduct")?.addEventListener("click", async () => {
   const variantColors = qsa(".variantColor");
   const variantPrices = qsa(".variantPrice");
   const variantStocks = qsa(".variantStock");
-  const variantSkus = "";
+  // Lưu ý: variantSkus không được sử dụng ở đây
 
   const variants = variantSizes.map((el, i) => ({
     // Tên trường phải khớp chính xác với CreateProductVariantRequest
@@ -344,93 +410,11 @@ async function loadProductsByCategory(categoryId) {
       btn.addEventListener("click", () => loadProductDetail(btn.dataset.id));
     });
 
-    // Gắn sự kiện Edit product
+    // GẮN SỰ KIỆN EDIT PRODUCT MỚI (CHỈ CHO PHÉP SỬA 3 TRƯỜNG CƠ BẢN)
     qsa(".btn-edit-product").forEach(btn => {
-      btn.addEventListener("click", async () => {
+      btn.addEventListener("click", () => {
         const productId = btn.dataset.id;
-        try {
-          // Lấy dữ liệu hiện tại của sản phẩm
-          const res = await fetchWithToken(`${PRODUCT_API}/${productId}`);
-          const p = res.data;
-
-          // Mở modal thêm sản phẩm và điền dữ liệu vào form
-          openAddProductForm(p.categoryId);
-          qs("#productName").value = p.name;
-          qs("#productDescription").value = p.description || "";
-          qs("#productBasePrice").value = p.baseprice;
-
-          // Xoá các biến thể hiện có trước khi load lại
-          qs("#variantContainer").innerHTML = "";
-          if (Array.isArray(p.variants)) {
-            p.variants.forEach(v => {
-              const container = qs("#variantContainer");
-              const div = document.createElement("div");
-              div.className = "mb-2 d-flex gap-2 flex-wrap align-items-center";
-              div.innerHTML = `
-                <input type="text" class="form-control variantSize" style="flex:1 1 15%" value="${escapeHtml(v.size)}" required>
-                <input type="text" class="form-control variantColor" style="flex:1 1 15%" value="${escapeHtml(v.color)}" required>
-                <input type="number" class="form-control variantPrice" style="flex:1 1 15%" value="${v.price}" required>
-                <input type="number" class="form-control variantStock" style="flex:1 1 15%" value="${v.quantityInStock}" required>
-                <input type="text" class="form-control variantSku" style="flex:1 1 25%" value="${escapeHtml(v.sku)}" required>
-                <button type="button" class="btn btn-danger btn-sm btnRemoveVariant" style="flex:0 0 5%">Xóa</button>
-              `;
-              container.appendChild(div);
-              div.querySelector(".btnRemoveVariant")?.addEventListener("click", () => div.remove());
-            });
-          }
-
-          // Thay đổi nút submit để update thay vì tạo mới
-          const btnSubmit = qs("#btnSubmitProduct");
-          btnSubmit.textContent = "Cập nhật sản phẩm";
-
-          const handleUpdate = async () => {
-            const name = qs("#productName").value.trim();
-            const description = qs("#productDescription").value.trim();
-            const baseprice = parseFloat(qs("#productBasePrice").value) || 0;
-
-            // Thu thập variants
-            const variantContainer = qs("#variantContainer");
-            const variants = Array.from(variantContainer.querySelectorAll(".variantSize")).map((el, i) => {
-              const colorEl = variantContainer.querySelectorAll(".variantColor")[i];
-              const priceEl = variantContainer.querySelectorAll(".variantPrice")[i];
-              const stockEl = variantContainer.querySelectorAll(".variantStock")[i];
-              const skuEl = variantContainer.querySelectorAll(".variantSku")[i];
-
-              return {
-                size: el.value.trim(),
-                color: colorEl.value.trim(),
-                price: parseFloat(priceEl.value) || 0,
-                quantityInStock: parseInt(stockEl.value) || 0,
-                sku: skuEl.value.trim()
-              };
-            });
-
-            const imageUrls = qsa(".imageUrl").map(el => el.value.trim());
-
-            const reqBody = { categoryId: p.categoryId, name, description, baseprice, variants, imageUrls };
-
-            try {
-              await fetchWithToken(`${PRODUCT_API}/${productId}`, {
-                method: "PUT",
-                body: JSON.stringify(reqBody)
-              });
-              alert("Cập nhật sản phẩm thành công!");
-              bootstrap.Modal.getInstance(qs("#addProductModal"))?.hide();
-              loadProductsByCategory(categoryId);
-            } catch (err) {
-              console.error(err);
-              alert("Cập nhật thất bại! Kiểm tra console hoặc log server.");
-            }
-          };
-
-          // Xoá event listener cũ trước khi thêm mới
-          btnSubmit.replaceWith(btnSubmit.cloneNode(true));
-          qs("#btnSubmitProduct")?.addEventListener("click", handleUpdate);
-
-        } catch (err) {
-          console.error(err);
-          alert("Lỗi tải dữ liệu sản phẩm để chỉnh sửa");
-        }
+        openEditProductModal(productId);
       });
     });
 
@@ -526,7 +510,7 @@ async function loadProductDetail(productId) {
     // Sự kiện edit/delete variant
     contentEl.querySelectorAll(".btn-edit-variant").forEach(btn => {
       btn.addEventListener("click", () => {
-        alert("Edit variant " + btn.dataset.id);
+        alert("Edit variant " + btn.dataset.id + " - Chức năng này cần được phát triển thêm.");
       });
     });
     contentEl.querySelectorAll(".btn-delete-variant").forEach(btn => {
@@ -571,40 +555,8 @@ async function populateParentSelects() {
   }
 }
 
-async function openEditProduct(productId) {
-  const res = await fetchWithToken(`${API_PRODUCT}/${productId}`);
-  const p = res.data;
-
-  // thông tin được phép sửa
-  qs("#editName").value = p.name ?? "";
-  qs("#editDescription").value = p.description ?? "";
-  qs("#editBasePrice").value = p.baseprice ?? "";
-
-  // category (không được sửa)
-  qs("#editCategoryName").value = p.category?.name ?? "Không rõ";
-
-  // load biến thể chỉ để xem
-  qs("#editVariantList").innerHTML = p.variants.map(v => `
-    <div class="d-flex gap-2 mb-2">
-      <input type="text" class="form-control" value="${v.name}" disabled>
-      <input type="text" class="form-control" value="${v.sku}" disabled>
-      <input type="number" class="form-control" value="${v.price}" disabled>
-      <input type="number" class="form-control" value="${v.stock}" disabled>
-    </div>
-  `).join("");
-
-  // load ảnh
-  qs("#editImageList").innerHTML = p.images.map(img => `
-    <img src="${img.url}" class="border rounded me-2" height="80">
-  `).join("");
-
-  // lưu productId để update
-  qs("#btnSaveProduct").setAttribute("data-id", productId);
-
-  new bootstrap.Modal("#editProductModal").show();
-}
-
-
+// *************** LƯU Ý: Hàm này đã BỊ XÓA (openEditProduct cũ) ***************
+// *************** Chức năng Edit sản phẩm được thay thế bằng openEditProductModal ***************
 
 
 // ==========================
