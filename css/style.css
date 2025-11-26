@@ -24,28 +24,8 @@ ul {
     list-style: none;
 }
 
-/* Header start*/
-.header {
-    width: auto;
-    height: 38px;
-    background-color: black;
-    color: white;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
 
-#DangNhapHeader {
-    text-decoration: underline;
-    cursor: pointer;
-}
-.header .hidden
-{
-    display: none;
-}
 
-/* header end */
 
 /* Navigation menu start*/
 
@@ -62,14 +42,6 @@ ul {
     padding: 10px;
 }
 
-.Navigation-menu-contents ul li {
-    margin-right: 24px;
-    display: inline-block;
-}
-
-.Navigation-menu-contents ul li i {
-    font-size: 16px;
-}
 
 .Navigation-menu-cart-user ul li {
     display: inline-block;
@@ -236,53 +208,6 @@ ul {
 }
 
 /* Thanh tìm kiếm cho mobile end*/
-
-/* PropMenu Navigation start */
-.Navigation-menu-contents {
-    position: relative;
-    font-size: 16px;
-}
-
-.PropMenuNavigation ul li {
-    width: 100%;
-    display: block;
-    padding: 14px 20px;
-    border-bottom: solid #717579;
-}
-
-.PropMenuNavigation ul {
-    position: absolute;
-    top: 42px;
-    justify-self: center;
-    z-index: 2;
-    background-color: #4c4c4c;
-    color: white;
-    width: 250px;
-    display: none;
-
-}
-
-.Navigation-menu-contents ul>li a {
-    text-decoration: none;
-    color: black;
-    padding-bottom: 23px;
-}
-
-.Navigation-menu-contents ul li:hover .PropMenuNavigation ul {
-    display: block;
-}
-
-.PropMenuNavigation ul li:hover {
-    background-color: #887d7d;
-    cursor: pointer;
-}
-
-.PropMenuNavigation ul li a {
-    color: #f5f5f5;
-}
-
-/* PropMenu Navigation end */
-
 
 
 
@@ -2002,4 +1927,81 @@ hr {
 
     /* footer end */
 }
+/* --- 1. Thiết lập chung --- */
+#categoryMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
+#categoryMenu li {
+  position: relative;
+}
+
+#categoryMenu a {
+  display: block;
+  text-decoration: none;
+  padding: 10px 15px;
+  white-space: nowrap;
+  color: rgb(0,0,0); /* chữ đen mặc định */
+}
+
+/* DANH MỤC chính */
+#categoryMenu > ul > li > a {
+  color: #000;
+  background-color: transparent;
+}
+
+/* Hover DANH MỤC */
+#categoryMenu > ul > li > a:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+/* --- 2. Menu cấp 1 (dưới DANH MỤC) --- */
+#categoryMenu > ul > li > ul {
+  display: none;
+  position: absolute;
+  top: 100%; /* xổ xuống dưới DANH MỤC */
+  left: 0;
+  min-width: 180px;
+  background-color: #444;
+  z-index: 1000;
+}
+
+/* Màu chữ menu cấp 1 */
+#categoryMenu > ul > li > ul a {
+  color: #fff;
+}
+
+/* Hiển thị khi hover DANH MỤC */
+#categoryMenu > ul > li.menu-parent:hover > ul {
+  display: block;
+}
+
+/* --- 3. Menu cấp 2+ (flyout ngang) --- */
+#categoryMenu li li > ul {
+  display: none;
+  position: absolute;
+  top: 0;       /* căn top với <li> cha */
+  left: 100%;   /* xổ ngang bên phải */
+  min-width: 180px;
+  background-color: #555;
+  z-index: 1000;
+}
+
+/* Màu chữ menu cấp 2+ */
+#categoryMenu li li > ul a {
+  color: #fff;
+}
+
+/* Hiển thị khi hover từng <li> cha */
+#categoryMenu li li:hover > ul {
+  display: block;
+}
+
+/* Hover menu con */
+#categoryMenu li a:hover {
+  background-color: #666;
+  color: #fff;
+}
