@@ -66,7 +66,7 @@ function openAddProductForm(categoryId) {
   qs("#imageContainer").innerHTML = "";
 
   const modalEl = qs("#addProductModal");
-  const modal = new bootstrap.Modal(modalEl);
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
   modal.show();
 
   // Gắn sự kiện riêng cho nút add variant trong modal này
@@ -97,7 +97,7 @@ function openAddProductForm(categoryId) {
  */
 async function openEditProductModal(productId) {
     const modalEl = qs("#editProductModal");
-    const modal = new bootstrap.Modal(modalEl);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     
     // Đảm bảo nút Save/Update được cập nhật listener mới nhất
     const btnSaveProduct = qs("#btnSaveProduct");
@@ -301,10 +301,16 @@ async function loadRootCategories() {
                 childLi.className = "list-group-item d-flex justify-content-between align-items-center";
                 childLi.innerHTML = `
                   <span>${escapeHtml(child.name)}</span>
-                  <div>
-                    <i class="ri-delete-bin-line text-danger btn-delete-category" style="cursor:pointer" data-id="${child.id}"></i>
-                    <button class="btn btn-sm btn-info btn-view-products" data-id="${child.id}">Xem SP</button>
-                    <button class="btn btn-sm btn-success btn-add-product" data-id="${child.id}"><i class="ri-add-circle-line"></i></button>
+                  <div class="d-flex align-items-center">
+                    <button class="btn-icon-view btn-view-products" title="Xem sản phẩm" data-id="${child.id}">
+                        <i class="ri-eye-line"></i>
+                    </button>
+                    <button class="btn-icon-add btn-add-product" title="Thêm sản phẩm" data-id="${child.id}">
+                        <i class="ri-add-line"></i>
+                    </button>
+                    <button class="btn-icon-delete btn-delete-category" title="Xóa danh mục" data-id="${child.id}">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
                   </div>
                 `;
                 childrenContainer.appendChild(childLi);
@@ -448,7 +454,7 @@ async function loadProductsByCategory(categoryId) {
 async function loadProductDetail(productId) {
   const modalEl = qs("#productDetailModal");
   const contentEl = qs("#productDetailContent");
-  const modal = new bootstrap.Modal(modalEl);
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
 
   contentEl.innerHTML = "Đang tải...";
 
@@ -493,12 +499,92 @@ async function loadProductDetail(productId) {
       variantsHtml = "<p>Không có biến thể</p>";
     }
 
+    // FORM THÊM BIẾN THỂ
+    variantsHtml += `
+        <div class="mt-2">
+            <button class="btn btn-sm btn-success" id="btnShowAddVariantForm">+ Thêm biến thể</button>
+            <div id="addVariantFormContainer" class="mt-2 d-none p-2 border rounded bg-light">
+                <h6>Thêm biến thể mới</h6>
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-2">
+                        <label class="small">Size</label>
+                        <input type="text" class="form-control form-control-sm" id="newVarSize" placeholder="Size">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small">Color</label>
+                        <input type="text" class="form-control form-control-sm" id="newVarColor" placeholder="Color">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small">Price</label>
+                        <input type="number" class="form-control form-control-sm" id="newVarPrice" placeholder="Price">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small">Stock</label>
+                        <input type="number" class="form-control form-control-sm" id="newVarStock" placeholder="Stock">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small">SKU</label>
+                        <input type="text" class="form-control form-control-sm" id="newVarSku" placeholder="SKU">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-sm btn-primary w-100" id="btnSubmitAddVariant" data-product-id="${p.productId}">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Build danh sách ảnh (Hỗ trợ xóa nếu có ID)
+    let imagesHtml = "";
+    // Ưu tiên dùng p.images (có ID) nếu có, nếu không dùng p.imageUrls (chỉ có URL)
+    const imageList = (Array.isArray(p.images) && p.images.length > 0) 
+        ? p.images 
+        : (Array.isArray(p.imageUrls) ? p.imageUrls.map(url => ({ id: null, imageUrl: url })) : []);
+
+    if (imageList.length > 0) {
+      imagesHtml = `<div class="d-flex flex-wrap gap-2 mb-3">`;
+      imageList.forEach(img => {
+        const imgId = img.id || img.productImageId;
+        // Nút xóa
+        const btnDelete = `<button class="btn btn-sm btn-danger position-absolute top-0 end-0 p-0 btn-delete-image" 
+                    style="width: 20px; height: 20px; line-height: 1;"
+                    data-product-id="${p.productId}" 
+                    data-image-id="${imgId || ''}"
+                    data-image-url="${escapeHtml(img.imageUrl)}">&times;</button>`;
+
+        imagesHtml += `
+          <div class="position-relative" style="width: 100px; height: 100px;">
+            <img src="${escapeHtml(img.imageUrl)}" alt="Product Image" class="img-thumbnail w-100 h-100" style="object-fit: cover;">
+            ${btnDelete}
+          </div>
+        `;
+      });
+      imagesHtml += `</div>`;
+    } else {
+      imagesHtml = "<p>Không có ảnh</p>";
+    }
+
+    // Nút thêm ảnh
+    imagesHtml += `
+      <div class="mt-2 mb-3">
+        <button class="btn btn-sm btn-success" id="btnShowAddImageForm">+ Thêm ảnh</button>
+        <div id="addImageForm" class="d-none mt-2">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="newImageUrl" placeholder="URL ảnh">
+                <button class="btn btn-primary" id="btnSubmitAddImage" data-product-id="${p.productId}">Lưu</button>
+            </div>
+        </div>
+      </div>
+    `;
+
     contentEl.innerHTML = `
       <h5>${escapeHtml(p.name)}</h5>
       <p><strong>Mã SP:</strong> ${p.productId}</p>
       <p><strong>Giá cơ bản:</strong> ${p.baseprice}</p>
       <p><strong>Mô tả:</strong> ${escapeHtml(p.description)}</p>
       <p><strong>Danh mục:</strong> ${p.categoryName}</p>
+      <p><strong>Ảnh sản phẩm:</strong></p>
+      ${imagesHtml}
       <p><strong>Biến thể:</strong></p>
       ${variantsHtml}
     `;
@@ -506,11 +592,174 @@ async function loadProductDetail(productId) {
     // Hiển thị modal
     modal.show();
 
+    // --- SỰ KIỆN THÊM BIẾN THỂ ---
+    contentEl.querySelector("#btnShowAddVariantForm")?.addEventListener("click", () => {
+        contentEl.querySelector("#addVariantFormContainer").classList.toggle("d-none");
+    });
+
+    contentEl.querySelector("#btnSubmitAddVariant")?.addEventListener("click", async (e) => {
+        const btn = e.target;
+        const productId = btn.dataset.productId;
+        
+        const size = contentEl.querySelector("#newVarSize").value.trim();
+        const color = contentEl.querySelector("#newVarColor").value.trim();
+        const price = parseFloat(contentEl.querySelector("#newVarPrice").value);
+        const stock = parseInt(contentEl.querySelector("#newVarStock").value);
+        const sku = contentEl.querySelector("#newVarSku").value.trim();
+
+        if (!size || !color || isNaN(price) || isNaN(stock)) {
+            return alert("Vui lòng nhập đầy đủ Size, Color, Price, Stock!");
+        }
+
+        const reqBody = {
+            size: size,
+            color: color,
+            price: price,
+            quantityInStock: stock,
+            sku: sku
+        };
+
+        try {
+            await fetchWithToken(`${PRODUCT_API}/${productId}/variants`, {
+                method: "POST",
+                body: JSON.stringify(reqBody)
+            });
+            alert("Thêm biến thể thành công!");
+            loadProductDetail(productId);
+        } catch (err) {
+            console.error(err);
+            alert("Thêm biến thể thất bại!");
+        }
+    });
+
+    // --- SỰ KIỆN ẢNH ---
+    // 1. Toggle form thêm ảnh
+    contentEl.querySelector("#btnShowAddImageForm")?.addEventListener("click", () => {
+        const form = contentEl.querySelector("#addImageForm");
+        form.classList.toggle("d-none");
+    });
+
+    // 2. Submit thêm ảnh
+    contentEl.querySelector("#btnSubmitAddImage")?.addEventListener("click", async (e) => {
+        const btn = e.target;
+        const productId = btn.dataset.productId;
+        const urlInput = contentEl.querySelector("#newImageUrl");
+        const imageUrl = urlInput.value.trim();
+
+        if (!imageUrl) return alert("Vui lòng nhập URL ảnh!");
+
+        try {
+            // API: POST /{productId}/images
+            // Body: AddProductImagesRequest { imageUrls: [...] }
+            await fetchWithToken(`${PRODUCT_API}/${productId}/images`, {
+                method: "POST",
+                body: JSON.stringify({ imageUrls: [imageUrl] })
+            });
+            alert("Thêm ảnh thành công!");
+            loadProductDetail(productId); // Reload modal
+        } catch (err) {
+            console.error(err);
+            alert("Thêm ảnh thất bại!");
+        }
+    });
+
+    // 3. Xóa ảnh
+    contentEl.querySelectorAll(".btn-delete-image").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const productId = btn.dataset.productId;
+            const imageId = btn.dataset.imageId;
+            const imageUrl = btn.dataset.imageUrl;
+
+            if (!confirm("Bạn chắc chắn muốn xóa ảnh này?")) return;
+
+            try {
+                if (imageId) {
+                    // CÁCH 1: Xóa theo ID (Chuẩn nhất)
+                    // API: DELETE /{productId}/images/{imageId}
+                    await fetchWithToken(`${PRODUCT_API}/${productId}/images/${imageId}`, {
+                        method: "DELETE"
+                    });
+                } else {
+                    // CÁCH 2: Xóa theo URL (Nếu Backend chưa trả về ID)
+                    // API: DELETE /{productId}/images?imageUrl=...
+                    console.warn("Không tìm thấy Image ID, thử xóa bằng URL...");
+                    const encodedUrl = encodeURIComponent(imageUrl);
+                    await fetchWithToken(`${PRODUCT_API}/${productId}/images?imageUrl=${encodedUrl}`, {
+                        method: "DELETE"
+                    });
+                }
+                alert("Xóa ảnh thành công!");
+                loadProductDetail(productId); // Reload modal
+            } catch (err) {
+                console.error(err);
+                alert("Xóa ảnh thất bại! (Vui lòng kiểm tra Backend đã hỗ trợ xóa theo ID hoặc URL chưa)");
+            }
+        });
+    });
+
 
     // Sự kiện edit/delete variant
     contentEl.querySelectorAll(".btn-edit-variant").forEach(btn => {
       btn.addEventListener("click", () => {
-        alert("Edit variant " + btn.dataset.id + " - Chức năng này cần được phát triển thêm.");
+        const variantId = parseInt(btn.dataset.id);
+        const productId = parseInt(btn.dataset.product);
+        const variant = p.variants.find(v => v.productVariantId === variantId);
+        
+        if (!variant) return;
+
+        const tr = btn.closest("tr");
+        
+        // Chuyển dòng thành form edit
+        tr.innerHTML = `
+            <td><input type="text" class="form-control form-control-sm edit-size" value="${escapeHtml(variant.size)}"></td>
+            <td><input type="text" class="form-control form-control-sm edit-color" value="${escapeHtml(variant.color)}"></td>
+            <td><input type="number" class="form-control form-control-sm edit-price" value="${variant.price}"></td>
+            <td><input type="number" class="form-control form-control-sm edit-stock" value="${variant.quantityInStock}"></td>
+            <td><input type="text" class="form-control form-control-sm edit-sku" value="${escapeHtml(variant.sku || '')}"></td>
+            <td>
+              <button class="btn btn-sm btn-success btn-save-variant">Lưu</button>
+              <button class="btn btn-sm btn-secondary btn-cancel-variant">Hủy</button>
+            </td>
+        `;
+
+        // Xử lý Lưu
+        tr.querySelector(".btn-save-variant").addEventListener("click", async () => {
+            const newSize = tr.querySelector(".edit-size").value.trim();
+            const newColor = tr.querySelector(".edit-color").value.trim();
+            const newPrice = parseFloat(tr.querySelector(".edit-price").value);
+            const newStock = parseInt(tr.querySelector(".edit-stock").value);
+            const newSku = tr.querySelector(".edit-sku").value.trim();
+
+            if (!newSize || !newColor || isNaN(newPrice) || isNaN(newStock)) {
+                alert("Vui lòng nhập đầy đủ: Size, Color, Price, Stock");
+                return;
+            }
+
+            const reqBody = {
+                size: newSize,
+                color: newColor,
+                price: newPrice,
+                quantityInStock: newStock,
+                sku: newSku
+            };
+
+            try {
+                await fetchWithToken(`${PRODUCT_API}/${productId}/variants/${variantId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(reqBody)
+                });
+                alert("Cập nhật biến thể thành công!");
+                loadProductDetail(productId); // Reload lại modal để hiển thị dữ liệu mới
+            } catch (err) {
+                console.error(err);
+                alert("Cập nhật thất bại! Kiểm tra console.");
+            }
+        });
+
+        // Xử lý Hủy
+        tr.querySelector(".btn-cancel-variant").addEventListener("click", () => {
+             loadProductDetail(productId); // Reload lại để hủy bỏ thay đổi
+        });
       });
     });
     contentEl.querySelectorAll(".btn-delete-variant").forEach(btn => {
