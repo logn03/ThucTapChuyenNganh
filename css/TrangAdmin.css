@@ -388,7 +388,7 @@ body {
 
 /* css nút đăng xuất */
 /* From Uiverse.io by vinodjangid07 */ 
-.btn-user {
+.btnLogoutAdmin {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -432,26 +432,26 @@ body {
   transition-duration: .3s;
 }
 /* hover effect on button width */
-.btn-user:hover {
+.btnLogoutAdmin:hover {
   width: 125px;
   border-radius: 40px;
   transition-duration: .3s;
 }
 
-.btn-user:hover .sign {
+.btnLogoutAdmin:hover .sign {
   width: 30%;
   transition-duration: .3s;
   padding-left: 20px;
 }
 /* hover effect button's text */
-.btn-user:hover .text {
+.btnLogoutAdmin:hover .text {
   opacity: 1;
   width: 70%;
   transition-duration: .3s;
   padding-right: 10px;
 }
 /* button click effect*/
-.btn-user:active {
+.btnLogoutAdmin:active {
   transform: translate(2px ,2px);
 }
 

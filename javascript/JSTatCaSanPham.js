@@ -213,40 +213,41 @@ function createParentCategoryElement(category) {
     `;
 
     const toggleIcon = parentDiv.querySelector('.toggle-children');
-    const childrenContainer = parentDiv.querySelector('.child-category-list');
-
-    // Kiểm tra danh mục có con
-    fetchWithToken(`${CATEGORY_API_URL}/${category.id}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.data && data.data.length > 0) {
                 toggleIcon.style.display = 'inline-block'; // hiện icon
                 toggleIcon.addEventListener('click', () => {
                     toggleChildren(parentDiv, category.id);
                 });
-            }
-        })
-        .catch(err => console.error("Lỗi kiểm tra con:", err));
-
     return parentDiv;
 }
-
-
 
 // ================================
 // Tạo HTML danh mục con
 // ================================
+// ================================
+// Tạo HTML danh mục con (ĐÃ CẬP NHẬT)
+// ================================
 function createChildCategoryElement(child) {
     const childDiv = document.createElement('div');
-    childDiv.classList.add('child-category', 'd-flex', 'justify-content-between', 'align-items-center', 'py-1');
+    childDiv.classList.add('child-category-item', 'd-flex', 'justify-content-between', 'align-items-center', 'py-1');
+    
+    // Thêm Category ID vào thuộc tính data-id để truy cập sau này
+    childDiv.setAttribute('data-id', child.id); 
 
     childDiv.innerHTML = `
-        <span class="category-name" style="font-size: 20px;">${child.name}</span>
+        <span class="category-name" style="font-size: 16px;">${child.name}</span>
     `;
+    
+    // Gán sự kiện click: Khi người dùng click vào danh mục con
+    childDiv.addEventListener('click', () => {
+        // 1. Tải sản phẩm của danh mục đó (page 0)
+        fetchProductsByCategory(child.id, 0); 
+        
+        // 2. (Tùy chọn) Highlight danh mục đang được chọn
+        highlightSelectedCategory(childDiv);
+    });
 
     return childDiv;
 }
-
 
 // ================================
 // Load danh mục con
@@ -268,16 +269,21 @@ async function loadChildren(parentId, childrenContainer) {
             });
         } else {
             childrenContainer.innerHTML = `
-                <div class="text-muted fst-italic">Không có danh mục con</div>
+                <div class="text-muted fst-italic" style="font-size: 16px;">Danh mục chưa có thông tin</div>
             `;
         }
 
+        // luôn đánh dấu đã load, dù có hay không có con
         childrenContainer.setAttribute('data-loaded', 'true');
 
     } catch (error) {
         console.error("Lỗi tải danh mục con:", error);
+        childrenContainer.innerHTML = `
+            <div class="text-danger fst-italic">Không tải được dữ liệu</div>
+        `;
     }
 }
+
 
 
 // ================================
@@ -293,20 +299,19 @@ function toggleChildren(parentDiv, categoryId) {
     if (isVisible) {
         // ẩn
         childrenContainer.style.display = 'none';
-        toggleIcon.classList.remove('ri-arrow-up-s-line');
-        toggleIcon.classList.add('ri-arrow-down-s-line');
+        toggleIcon.classList.remove('xoay');
     } else {
         // hiện
         childrenContainer.style.display = 'block';
-        toggleIcon.classList.remove('ri-arrow-down-s-line');
-        toggleIcon.classList.add('ri-arrow-up-s-line');
+        toggleIcon.classList.add('xoay');
 
-        // nếu chưa load -> load 1 lần duy nhất
+        // load con nếu chưa load
         if (!isLoaded) {
             loadChildren(categoryId, childrenContainer);
         }
     }
 }
+
 
 
 // ================================
@@ -356,29 +361,115 @@ async function loadRootCategories() {
   `;
  }
 }
+// Cấu hình cơ bản (Page number bắt đầu từ 0 trong Spring Data Pageable)
+const API_URL = 'http://localhost:8080/api/products'; // Thay đổi URL nếu cần
+const PAGE_SIZE = 9; // 3 dòng x 3 cột = 9 sản phẩm
 
-//xoay mũi tên danh mục
-function toggleChildren(parentDiv, categoryId) {
-    const childrenContainer = parentDiv.querySelector('.child-category-list');
-    const toggleIcon = parentDiv.querySelector('.toggle-children');
+function formatPrice(price) {
+    // Giả sử giá là $ (USD) hoặc thêm đơn vị K (kỳ vọng từ giá cũ)
+    return `$${price}`; // Ví dụ: $120
+}
 
-    const isVisible = childrenContainer.style.display !== 'none';
-    const isLoaded = childrenContainer.getAttribute('data-loaded') === 'true';
+function renderProduct(product) {
+    // Sử dụng col-lg-4 (12/3 = 4) cho 3 cột trên màn hình lớn
+    return `
+        <div class="col-12 col-md-6 col-lg-4 mb-4">
+            <div class="product-item">
+                <div class="product-image-wrapper">
+                    <img src="${product.image}" alt="${product.name}" class="img-fluid product-image">
+                    <div class="BoxMuaNgay">MUA NGAY</div>
+                </div>
+                <div class="product-details text-center mt-2">
+                    <p class="product-name">${product.name}</p>
+                    <p class="product-price">
+                        <strong>${formatPrice(product.baseprice)}</strong>
+                        </p>
+                </div>
+            </div>
+        </div>
+    `;
+}
 
-    if (isVisible) {
-        // ẩn
-        childrenContainer.style.display = 'none';
-        toggleIcon.classList.remove('xoay');
-    } else {
-        // hiện
-        childrenContainer.style.display = 'block';
-        toggleIcon.classList.add('xoay');
+async function fetchProducts(page = 0) {
+    try {
+        // Gọi API với các tham số phân trang
+        const response = await fetchWithToken(`${API_URL}?page=${page}&size=${PAGE_SIZE}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const jsonResponse = await response.json();
+        const productData = jsonResponse.data.content; // Lấy mảng sản phẩm từ cấu trúc BaseResponse và Page
+        
+        const productListElement = document.getElementById('product-list');
+        productListElement.innerHTML = productData.map(renderProduct).join('');
 
-        // load con nếu chưa load
-        if (!isLoaded) {
-            loadChildren(categoryId, childrenContainer);
+        // Cập nhật phân trang (không bắt buộc, có thể làm sau)
+        // updatePagination(jsonResponse.data.totalPages, page); 
+
+    } catch (error) {
+        console.error("Lỗi khi tải sản phẩm:", error);
+        document.getElementById('product-list').innerHTML = '<p class="col-12 text-center text-danger">Không thể tải sản phẩm. Vui lòng kiểm tra API.</p>';
+    }
+}
+
+// Chạy hàm khi trang được tải
+document.addEventListener('DOMContentLoaded', () => {
+    fetchProducts(0); // Tải trang đầu tiên
+});
+
+// Thêm hàm này vào phần JavaScript của bạn, bên cạnh fetchProducts
+async function fetchProductsByCategory(categoryId, page = 0) {
+    const productListElement = document.getElementById('product-list');
+    const url = `${API_URL}/categories/${categoryId}/products?page=${page}&size=${PAGE_SIZE}`;
+
+    try {
+        // **QUAN TRỌNG:** Phải sử dụng fetchWithToken vì endpoint này có thể được bảo vệ.
+        // Tuy nhiên, nếu API sản phẩm công khai, bạn có thể dùng fetch thường. 
+        // Dựa trên kinh nghiệm debug lỗi 401 trước đó, ta sẽ dùng fetchWithToken.
+        const response = await fetchWithToken(url); 
+        
+        if (!response.ok) {
+            if (response.status === 401) {
+                productListElement.innerHTML = '<p class="col-12 text-center text-danger">Lỗi 401: Vui lòng đăng nhập hoặc kiểm tra quyền truy cập.</p>';
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const jsonResponse = await response.json();
+        // Kiểm tra xem dữ liệu có hợp lệ không
+        if (!jsonResponse.data || !jsonResponse.data.content) {
+             throw new Error("Cấu trúc dữ liệu API sản phẩm không hợp lệ.");
+        }
+        
+        const productData = jsonResponse.data.content; 
+        
+        if (productData.length === 0) {
+             productListElement.innerHTML = '<p class="col-12 text-center text-muted">Không tìm thấy sản phẩm nào trong danh mục này.</p>';
+        } else {
+             productListElement.innerHTML = productData.map(renderProduct).join('');
+        }
+
+        // Cập nhật phân trang (chưa làm)
+        // updatePagination(jsonResponse.data.totalPages, page, categoryId); 
+
+    } catch (error) {
+        console.error(`Lỗi khi tải sản phẩm cho danh mục ${categoryId}:`, error);
+        // Ngăn hiển thị lỗi chung nếu đã hiển thị lỗi 401/lỗi đặc biệt khác
+        if (!productListElement.innerHTML.includes("401") && !productListElement.innerHTML.includes("Không tìm thấy")) {
+             productListElement.innerHTML = '<p class="col-12 text-center text-danger">Lỗi kết nối hoặc dữ liệu API sản phẩm.</p>';
         }
     }
+}
+function highlightSelectedCategory(selectedElement) {
+    // 1. Loại bỏ class 'selected' khỏi tất cả các item trước đó
+    document.querySelectorAll('.child-category-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    // 2. Thêm class 'selected' cho item được click
+    selectedElement.classList.add('selected');
 }
 
 // ================================

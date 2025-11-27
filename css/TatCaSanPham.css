@@ -1697,3 +1697,61 @@ hr {
   color: #fff;
 }
 
+/* Container bao bọc hình ảnh và nút MUA NGAY */
+.product-image-wrapper {
+    position: relative; /* Quan trọng để định vị nút "MUA NGAY" */
+    overflow: hidden; /* Ngăn nút MUA NGAY tràn ra khỏi container */
+}
+
+/* Ảnh sản phẩm */
+.product-image {
+    display: block;
+    width: 100%;
+    transition: transform 0.3s ease; /* Hiệu ứng zoom nhẹ (tùy chọn) */
+}
+
+/* Nút MUA NGAY (Ban đầu ẩn/di chuyển ra khỏi tầm nhìn) */
+.BoxMuaNgay {
+    position: absolute;
+    bottom: 0; /* Đặt ở đáy hình ảnh */
+    left: 0;
+    width: 100%;
+    background-color: #ff0000; /* Màu nền đỏ như hình */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    cursor: pointer;
+    
+    /* Thiết lập ẩn và hiệu ứng trượt */
+    transform: translateY(100%); /* Di chuyển xuống dưới 100% chiều cao của nó (ẩn) */
+    transition: transform 0.3s ease;
+}
+
+/* Hiệu ứng HOVER: Khi di chuột vào wrapper, nút MUA NGAY sẽ trượt lên */
+.product-image-wrapper:hover .BoxMuaNgay {
+    transform: translateY(0); /* Trượt về vị trí ban đầu (hiển thị) */
+}
+
+/* Hiệu ứng HOVER: Tùy chọn, làm mờ nhẹ hình ảnh khi hover */
+.product-image-wrapper:hover .product-image {
+    transform: scale(1.05);
+}
+
+/* Thêm CSS cho thông tin sản phẩm */
+.product-item {
+    border: 1px solid #eee; /* Tùy chọn */
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Tùy chọn */
+}
+
+.product-name {
+    text-transform: uppercase;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.product-price strong {
+    font-size: 18px;
+    color: #333;
+}
