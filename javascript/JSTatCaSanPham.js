@@ -169,3 +169,219 @@ OpenEye.addEventListener("click", () => {
   ShowPassWord(PassWordInput, OpenEye);
 });
 
+
+const CATEGORY_API_URL = 'http://localhost:8080/api/v1/categorys';
+const categoryListContainer = document.getElementById('CategoryListContainer');
+
+// ================================
+// Hàm fetch có kèm token
+// ================================
+async function fetchWithToken(url, options = {}) {
+    const token = localStorage.getItem("accessToken");
+
+    return await fetch(url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            ...(options.headers || {})
+        }
+    });
+}
+
+
+// ================================
+// Tạo HTML danh mục cha
+// ================================
+function createParentCategoryElement(category) {
+    const parentDiv = document.createElement('div');
+    parentDiv.classList.add('parent-category', 'py-2');
+
+    // Tạm thời ẩn icon, sẽ kiểm tra con sau
+    parentDiv.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center category-header"
+             data-category-id="${category.id}">
+             
+            <h2 class="category-name">${category.name}</h2>
+
+            <div class="category-actions">
+                <i style="font-size: 25px;" class="ri-arrow-right-s-line toggle-children" style="display: none;"></i>
+            </div>
+        </div>
+
+        <div class="child-category-list ps-3 mt-1" style="display: none;"></div>
+    `;
+
+    const toggleIcon = parentDiv.querySelector('.toggle-children');
+    const childrenContainer = parentDiv.querySelector('.child-category-list');
+
+    // Kiểm tra danh mục có con
+    fetchWithToken(`${CATEGORY_API_URL}/${category.id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.data && data.data.length > 0) {
+                toggleIcon.style.display = 'inline-block'; // hiện icon
+                toggleIcon.addEventListener('click', () => {
+                    toggleChildren(parentDiv, category.id);
+                });
+            }
+        })
+        .catch(err => console.error("Lỗi kiểm tra con:", err));
+
+    return parentDiv;
+}
+
+
+
+// ================================
+// Tạo HTML danh mục con
+// ================================
+function createChildCategoryElement(child) {
+    const childDiv = document.createElement('div');
+    childDiv.classList.add('child-category', 'd-flex', 'justify-content-between', 'align-items-center', 'py-1');
+
+    childDiv.innerHTML = `
+        <span class="category-name" style="font-size: 20px;">${child.name}</span>
+    `;
+
+    return childDiv;
+}
+
+
+// ================================
+// Load danh mục con
+// ================================
+async function loadChildren(parentId, childrenContainer) {
+    try {
+        const response = await fetchWithToken(`${CATEGORY_API_URL}/${parentId}`);
+
+        if (!response.ok) throw new Error("Lỗi khi tải danh mục con");
+
+        const responseData = await response.json();
+        const children = responseData.data;
+
+        childrenContainer.innerHTML = ""; // clear
+
+        if (children && children.length > 0) {
+            children.forEach(child => {
+                childrenContainer.appendChild(createChildCategoryElement(child));
+            });
+        } else {
+            childrenContainer.innerHTML = `
+                <div class="text-muted fst-italic">Không có danh mục con</div>
+            `;
+        }
+
+        childrenContainer.setAttribute('data-loaded', 'true');
+
+    } catch (error) {
+        console.error("Lỗi tải danh mục con:", error);
+    }
+}
+
+
+// ================================
+// Toggle hiển thị/ẩn danh mục con
+// ================================
+function toggleChildren(parentDiv, categoryId) {
+    const childrenContainer = parentDiv.querySelector('.child-category-list');
+    const toggleIcon = parentDiv.querySelector('.toggle-children');
+
+    const isVisible = childrenContainer.style.display !== 'none';
+    const isLoaded = childrenContainer.getAttribute('data-loaded') === 'true';
+
+    if (isVisible) {
+        // ẩn
+        childrenContainer.style.display = 'none';
+        toggleIcon.classList.remove('ri-arrow-up-s-line');
+        toggleIcon.classList.add('ri-arrow-down-s-line');
+    } else {
+        // hiện
+        childrenContainer.style.display = 'block';
+        toggleIcon.classList.remove('ri-arrow-down-s-line');
+        toggleIcon.classList.add('ri-arrow-up-s-line');
+
+        // nếu chưa load -> load 1 lần duy nhất
+        if (!isLoaded) {
+            loadChildren(categoryId, childrenContainer);
+        }
+    }
+}
+
+
+// ================================
+// Load danh mục root
+// ================================
+async function loadRootCategories() {
+ const token = localStorage.getItem("accessToken");
+
+    // Nếu không có token, không cố gắng tải (hoặc chuyển hướng)
+    if (!token) {
+        categoryListContainer.innerHTML = '<p class="text-danger">Vui lòng đăng nhập để xem danh mục.</p>';
+        console.warn("Chưa có JWT Token, không thể tải danh mục.");
+        return; 
+    }
+    
+ try {
+        // Sử dụng fetchWithToken như đã định nghĩa
+ const response = await fetchWithToken(`${CATEGORY_API_URL}/root`);
+
+ if (!response.ok) {
+            // Xử lý lỗi 401 rõ ràng hơn nếu token hết hạn
+            if (response.status === 401) {
+                 throw new Error("Token hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
+            }
+            throw new Error("Không load được danh mục gốc");
+        }
+
+ const responseData = await response.json();
+ const rootCategories = responseData.data;
+
+ categoryListContainer.innerHTML = ""; // clear trước
+
+ if (rootCategories && rootCategories.length > 0) {
+  rootCategories.forEach(category => {
+  categoryListContainer.appendChild(createParentCategoryElement(category));
+  });
+ } else {
+  categoryListContainer.innerHTML = `
+   <p class="text-center text-muted">Chưa có danh mục nào.</p>
+  `;
+ }
+
+ } catch (error) {
+  console.error("Lỗi tải danh mục gốc:", error);
+  categoryListContainer.innerHTML = `
+   <p class="text-danger">Lỗi: ${error.message}</p>
+  `;
+ }
+}
+
+//xoay mũi tên danh mục
+function toggleChildren(parentDiv, categoryId) {
+    const childrenContainer = parentDiv.querySelector('.child-category-list');
+    const toggleIcon = parentDiv.querySelector('.toggle-children');
+
+    const isVisible = childrenContainer.style.display !== 'none';
+    const isLoaded = childrenContainer.getAttribute('data-loaded') === 'true';
+
+    if (isVisible) {
+        // ẩn
+        childrenContainer.style.display = 'none';
+        toggleIcon.classList.remove('xoay');
+    } else {
+        // hiện
+        childrenContainer.style.display = 'block';
+        toggleIcon.classList.add('xoay');
+
+        // load con nếu chưa load
+        if (!isLoaded) {
+            loadChildren(categoryId, childrenContainer);
+        }
+    }
+}
+
+// ================================
+// Bắt đầu load khi DOM sẵn sàng
+// ================================
+document.addEventListener('DOMContentLoaded', loadRootCategories);

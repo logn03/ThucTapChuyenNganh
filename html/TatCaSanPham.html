@@ -36,21 +36,8 @@
       </li>
       <li class="Navigation-menu-contents">
         <ul>
-          <li>
-            <a href="#">
-              DANH MỤC
-              <i class="ri-arrow-right-wide-fill"></i>
-            </a>
-            <!-- PropMenu Navigation start-->
-            <div class="PropMenuNavigation">
-              <ul>
-                <li><a href="#">ÁO</a></li>
-                <li><a href="#">QUẦN</a></li>
-                <li><a href="#">PHỤ KIỆN</a></li>
-                <li><a href="#">OUTLET</a></li>
-              </ul>
-            </div>
-            <!-- PropMenu Navigation end-->
+          <li id="categoryMenu">
+            <!-- JS sẽ render danh mục ở đây -->
           </li>
         </ul>
       </li>
@@ -276,19 +263,16 @@
         <button id="BtnSideBarMobile"><i class="ri-arrow-right-s-line" style="font-size: 24px;"></i></button>
       </div>
       <div id="Sidebars" class="col-2 Sidebars d-lg-block">
-        <div class="SideBarsTitle">
-          <div id="DanhMuc" class=" d-flex justify-content-between">
-            <h2>DANH MỤC </h2>
+        <div class="SideBarContainer">
+          <div id="DanhMuc" class="d-flex justify-content-between">
+            <h2>DANH MỤC</h2>
             <i id="IconFilter" class="ri-sound-module-line" style="font-size: 22px;"></i>
           </div>
-        </div>
-        <hr>
-        <div class="SideBarsContent">
-          <ul id="SideBarsType">
-            <li><a href="">Áo</a></li>
-            <li><a href="">Quần</a></li>
-            <li><a href="">Phụ kiện</a></li>
-          </ul>
+          <hr>
+          <div class="SideBarsContent">
+            <div id="CategoryListContainer">
+            </div>
+          </div>
           <hr>
           <div class="SidebarsPrice">
             <div id="PriceItem" class="PiceItem d-flex justify-content-between align-items-center">
@@ -639,7 +623,7 @@
     </div>
   </div>
   <!-- footer end-->
-       <script type="importmap">
+  <script type="importmap">
       {
         "imports": {
           "jwt-decode": "https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js"
