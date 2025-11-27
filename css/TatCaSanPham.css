@@ -966,15 +966,16 @@ hr {
 
 /* Mobile start*/
 @media (max-width: 767px) {
+
     #Sidebars {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 99;
         position: absolute;
-        top: 105px;
+        top: 90px;
         left: 0;
         width: 250px;
-        height: 100vh;
+        height: fit-content;
         background: white;
         box-shadow: 2px 0 10px rgba(0,0,0,0.2);
     }
@@ -983,8 +984,9 @@ hr {
         transform: translateX(0);
     }
 
-    .header p {
-        font-size: 12px;
+    .Navigation-menu-contents
+    {
+        display: none;
     }
 
     .Navigation-menu {

@@ -1041,9 +1041,15 @@ ul {
 
 /* Mobile start*/
 @media (max-width: 767px) {
-    .header p {
-        font-size: 12px;
-    }
+  .SideBarsMobile button
+  {
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+  .SideBarContainer
+  {
+    padding: 10px;
+  }
 
     .Navigation-menu {
         gap: 20px;
