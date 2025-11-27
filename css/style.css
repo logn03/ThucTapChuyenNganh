@@ -1287,22 +1287,10 @@ ul {
         padding: 10px 20px;
     }
 
-    .container-3-email {
-        padding-bottom: 20px;
-    }
-
-    .container-3-email input {
-        padding-left: 50px;
-    }
-
-    .container-3-button {
-        padding-left: 10px;
-    }
 
     .footer-contents {
         font-size: 20px;
         height: auto;
-        padding-top: 140px;
         flex-wrap: wrap;
         gap: 10px;
         justify-content: space-around;
