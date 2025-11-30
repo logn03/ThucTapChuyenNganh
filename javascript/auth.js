@@ -94,60 +94,67 @@ const categoryMenu = document.getElementById("categoryMenu");
 const API_ROOT_CATEGORIES = "http://localhost:8080/api/v1/categorys/root";
 const API_CHILD_CATEGORIES = id => `http://localhost:8080/api/v1/categorys/${id}`;
 
+// URL của trang sản phẩm
+const PRODUCT_PAGE_URL = "TatCaSanPham.html"; 
+
 // fetch public
 async function fetchData(url) {
-  const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  const data = await res.json();
-  return data.data;
+  const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
+  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  const data = await res.json();
+  return data.data;
 }
 
 // render menu đệ quy multi-level
 async function renderCategoryItem(category) {
-  let html = `<li><a href="#">${category.name}</a>`;
+  
+  // ✨ CHỈNH SỬA Ở ĐÂY: Gắn ID vào URL
+  const linkUrl = `${PRODUCT_PAGE_URL}?categoryId=${category.id}`;
+  
+  let html = `<li><a href="${linkUrl}">${category.name}</a>`;
 
-  try {
-    const children = await fetchData(API_CHILD_CATEGORIES(category.id));
-    if (children && children.length > 0) {
-      html += '<ul>';
-      for (const child of children) {
-        html += await renderCategoryItem(child);
-      }
-      html += '</ul>';
-    }
-  } catch (err) {
-    console.error("Cannot load child categories:", err);
-  }
+  try {
+    const children = await fetchData(API_CHILD_CATEGORIES(category.id));
+    if (children && children.length > 0) {
+      html += '<ul>';
+      for (const child of children) {
+        html += await renderCategoryItem(child);
+      }
+      html += '</ul>';
+    }
+  } catch (err) {
+    console.error("Cannot load child categories:", err);
+  }
 
-  html += '</li>';
-  return html;
+  html += '</li>';
+  return html;
 }
 
 // render toàn bộ menu
 async function renderCategories() {
-  if (!categoryMenu) return;
+  if (!categoryMenu) return;
 
-  try {
-    const roots = await fetchData(API_ROOT_CATEGORIES);
-    if (!roots || roots.length === 0) {
-      categoryMenu.innerHTML = "<p>Chưa có danh mục</p>";
-      return;
-    }
+  try {
+    const roots = await fetchData(API_ROOT_CATEGORIES);
+    if (!roots || roots.length === 0) {
+      categoryMenu.innerHTML = "<p>Chưa có danh mục</p>";
+      return;
+    }
 
-    let html = '<ul><li class="menu-parent title"><a href="#">DANH MỤC <i class="ri-arrow-right-wide-fill"></i></a><ul>';
+    let html = '<ul><li class="menu-parent title"><a href="#">DANH MỤC <i class="ri-arrow-right-wide-fill"></i></a><ul>';
 
-    for (const root of roots) {
-      html += await renderCategoryItem(root);
-    }
+    for (const root of roots) {
+      html += await renderCategoryItem(root);
+    }
 
-    html += '</ul></li></ul>';
+    html += '</ul></li></ul>';
 
-    categoryMenu.innerHTML = html;
+    categoryMenu.innerHTML = html;
 
-  } catch (err) {
-    console.error("Cannot render categories:", err);
-    categoryMenu.innerHTML = "<p>Không thể tải danh mục</p>";
-  }
+  } catch (err) {
+    console.error("Cannot render categories:", err);
+    categoryMenu.innerHTML = "<p>Không thể tải danh mục</p>";
+  }
 }
 
 document.addEventListener('DOMContentLoaded', renderCategories);

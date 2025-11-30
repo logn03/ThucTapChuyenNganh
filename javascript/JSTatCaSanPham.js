@@ -45,12 +45,17 @@ IconFilter.addEventListener('click', () => {
 });
 // ẩn hiện cho sidebars mobile end
 
+
+
+
+
+
 // ================================
 // Cấu hình API
 // ================================
 const CATEGORY_API_URL = 'http://localhost:8080/api/v1/categorys';
 const PRODUCT_API_URL = 'http://localhost:8080/api/v1/products';
-const PAGE_SIZE = 9; // 3x3 grid
+const PAGE_SIZE = 9;
 
 // ================================
 // Biến quản lý state phân trang
@@ -65,7 +70,6 @@ const phanTrangContainer = document.querySelector('.PhanTrang');
 const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 
-
 // ================================
 // Render danh mục
 // ================================
@@ -73,18 +77,28 @@ function createParentCategoryElement(category) {
     const parentDiv = document.createElement('div');
     parentDiv.classList.add('parent-category', 'py-2');
     parentDiv.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center category-header"
-             data-category-id="${category.id}">
-            <h2 class="category-name">${category.name}</h2>
+        <div class="d-flex justify-content-between align-items-center category-header" data-category-id="${category.id}">
+            <h2 class="category-name clickable-parent-name">${category.name}</h2>
             <div class="category-actions">
                 <i style="font-size: 25px;" class="ri-arrow-right-s-line toggle-children"></i>
             </div>
         </div>
         <div class="child-category-list ps-3 mt-1" style="display: none;"></div>
     `;
-
+    
+    // 1. Sự kiện cho MŨI TÊN (chỉ mở/đóng danh mục con)
     const toggleIcon = parentDiv.querySelector('.toggle-children');
-    toggleIcon.addEventListener('click', () => toggleChildren(parentDiv, category.id));
+    // Thay vì gọi toggleChildren, chúng ta sẽ tạo một hàm mới chỉ làm nhiệm vụ toggle UI
+    toggleIcon.addEventListener('click', () => toggleChildrenUI(parentDiv, category));
+    
+    // 2. Sự kiện cho TÊN DANH MỤC CHA (tải sản phẩm)
+    const categoryName = parentDiv.querySelector('.clickable-parent-name');
+    categoryName.addEventListener('click', () => {
+        // Tải sản phẩm của danh mục cha VÀ con
+        fetchAndRenderProductsFromParent(category);
+        highlightSelectedCategory(categoryName); // Bạn có thể muốn highlight tên danh mục cha
+    });
+
     return parentDiv;
 }
 
@@ -100,26 +114,29 @@ function createChildCategoryElement(child) {
     return childDiv;
 }
 
-async function loadChildren(parentId, childrenContainer) {
+async function loadChildren(parentCategory, childrenContainer) {
     try {
-        const response = await fetch(`${CATEGORY_API_URL}/${parentId}`, { headers: { "Content-Type": "application/json" } });
-        if (!response.ok) throw new Error("Lỗi khi tải danh mục con");
+        const response = await fetch(`${CATEGORY_API_URL}/${parentCategory.id}`, { headers: { 'Content-Type': 'application/json' } });
+        if (!response.ok) throw new Error('Lỗi khi tải danh mục con');
 
         const data = (await response.json()).data;
         childrenContainer.innerHTML = '';
         if (data && data.length > 0) {
             data.forEach(child => childrenContainer.appendChild(createChildCategoryElement(child)));
         } else {
-            childrenContainer.innerHTML = `<div class="text-muted fst-italic" style="font-size: 16px;">Danh mục chưa có thông tin</div>`;
+            childrenContainer.innerHTML = `<div class="text-muted fst-italic" style="font-size:16px;">Danh mục chưa có thông tin</div>`;
         }
         childrenContainer.setAttribute('data-loaded', 'true');
     } catch (err) {
-        console.error("Lỗi tải danh mục con:", err);
+        console.error('Lỗi tải danh mục con:', err);
         childrenContainer.innerHTML = `<div class="text-danger fst-italic">Không tải được dữ liệu</div>`;
     }
 }
 
-function toggleChildren(parentDiv, categoryId) {
+// ================================
+// Toggles danh mục con UI (chỉ cho mũi tên)
+// ================================
+function toggleChildrenUI(parentDiv, parentCategory) {
     const childrenContainer = parentDiv.querySelector('.child-category-list');
     const toggleIcon = parentDiv.querySelector('.toggle-children');
 
@@ -132,14 +149,15 @@ function toggleChildren(parentDiv, categoryId) {
     } else {
         childrenContainer.style.display = 'block';
         toggleIcon.classList.add('xoay');
-        if (!isLoaded) loadChildren(categoryId, childrenContainer);
+        if (!isLoaded) loadChildren(parentCategory, childrenContainer);
+        // KHÔNG CÓ LOGIC TẢI SẢN PHẨM Ở ĐÂY
     }
 }
 
 async function loadRootCategories() {
     try {
-        const response = await fetch(`${CATEGORY_API_URL}/root`, { headers: { "Content-Type": "application/json" } });
-        if (!response.ok) throw new Error("Không load được danh mục gốc");
+        const response = await fetch(`${CATEGORY_API_URL}/root`, { headers: { 'Content-Type': 'application/json' } });
+        if (!response.ok) throw new Error('Không load được danh mục gốc');
 
         const rootCategories = (await response.json()).data;
         categoryListContainer.innerHTML = '';
@@ -149,7 +167,7 @@ async function loadRootCategories() {
             categoryListContainer.innerHTML = '<p class="text-center text-muted">Chưa có danh mục nào.</p>';
         }
     } catch (err) {
-        console.error("Lỗi tải danh mục gốc:", err);
+        console.error('Lỗi tải danh mục gốc:', err);
         categoryListContainer.innerHTML = `<p class="text-danger">Lỗi: ${err.message}</p>`;
     }
 }
@@ -162,10 +180,7 @@ function formatPrice(price) {
 }
 
 function renderProduct(product) {
-    const imageUrl = (product.images && product.images.length > 0) 
-        ? product.images[0].url 
-        : 'default-image.jpg';
-
+    const imageUrl = (product.images && product.images.length > 0) ? product.images[0].url : 'default-image.jpg';
     return `
         <div class="col-12 col-md-6 col-lg-4 mb-4">
             <div class="product-item">
@@ -186,18 +201,19 @@ async function fetchAndRenderProducts(page = 0, categoryId = null) {
     currentPage = page;
     currentCategoryId = categoryId;
 
-    const url = categoryId 
-        ? `${PRODUCT_API_URL}/categories/${categoryId}?page=${page}&size=${PAGE_SIZE}`
-        : `${PRODUCT_API_URL}?page=${page}&size=${PAGE_SIZE}`;
+    const url = categoryId ? `${PRODUCT_API_URL}/categories/${categoryId}/products?page=${page}&size=${PAGE_SIZE}`
+                           : `${PRODUCT_API_URL}?page=${page}&size=${PAGE_SIZE}`;
 
     try {
-        const response = await fetch(url, { headers: { "Content-Type": "application/json" } });
+        const response = await fetch(url, { headers: { 'Content-Type': 'application/json' } });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const jsonResponse = await response.json();
-        const productData = jsonResponse.data.content;
-        totalPages = jsonResponse.data.totalPages;
 
-        productListElement.innerHTML = productData.length > 0 
+        const jsonResponse = await response.json();
+        const pageData = jsonResponse?.data;
+        const productData = pageData?.content ?? [];
+        totalPages = pageData?.totalPages ?? 0;
+
+        productListElement.innerHTML = productData.length > 0
             ? productData.map(renderProduct).join('')
             : '<p class="col-12 text-center text-muted">Không tìm thấy sản phẩm nào.</p>';
 
@@ -205,6 +221,48 @@ async function fetchAndRenderProducts(page = 0, categoryId = null) {
     } catch (err) {
         console.error('Lỗi khi tải sản phẩm:', err);
         productListElement.innerHTML = '<p class="col-12 text-center text-danger">Không thể tải sản phẩm. Kiểm tra API.</p>';
+    }
+}
+
+// ================================
+// Fetch tất cả sản phẩm của category cha (bao gồm con)
+// ================================
+async function fetchAndRenderProductsFromParent(parentCategory) {
+    try {
+        // Lấy danh sách con
+        const response = await fetch(`${CATEGORY_API_URL}/${parentCategory.id}`, { headers: { 'Content-Type': 'application/json' } });
+        if (!response.ok) throw new Error('Lỗi tải danh mục con');
+        const children = (await response.json()).data;
+
+        // Bao gồm cả parentId
+        const allCategoryIds = [parentCategory.id];
+        if (children && children.length > 0) {
+            children.forEach(c => allCategoryIds.push(c.id));
+        }
+
+        // Gọi API riêng cho từng category con + parent (không thể gộp backend)
+        const fetches = allCategoryIds.map(id => fetch(`${PRODUCT_API_URL}/categories/${id}/products?page=0&size=100`, { headers: { 'Content-Type': 'application/json' } }));
+        const results = await Promise.all(fetches);
+
+        let products = [];
+        for (let res of results) {
+            if (res.ok) {
+                const data = (await res.json()).data;
+                products = products.concat(data?.content ?? []);
+            }
+        }
+
+        productListElement.innerHTML = products.length > 0
+            ? products.map(renderProduct).join('')
+            : '<p class="col-12 text-center text-muted">Không tìm thấy sản phẩm nào.</p>';
+
+        currentPage = 0;
+        totalPages = 1;
+        renderPagination();
+
+    } catch (err) {
+        console.error('Lỗi khi tải sản phẩm category cha:', err);
+        productListElement.innerHTML = '<p class="col-12 text-center text-danger">Không thể tải sản phẩm category cha.</p>';
     }
 }
 
@@ -266,5 +324,52 @@ function highlightSelectedCategory(selectedElement) {
 // ================================
 document.addEventListener('DOMContentLoaded', () => {
     loadRootCategories();
-    fetchAndRenderProducts(0, null); // load tất cả sản phẩm trang 0
+    fetchAndRenderProducts(0, null);
+});
+
+
+
+
+//lọc sản phẩm 
+//nút giá
+const priceRadios = document.querySelectorAll('input[name="price"]');
+let selectedPrice = null;
+
+priceRadios.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    selectedPrice = e.target.value;
+    console.log("Giá đã chọn:", selectedPrice);
+  });
+});
+
+// nút màu
+const colorCheckboxes = document.querySelectorAll('input[name="chonmau"]');
+let selectedColors = [];
+
+colorCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    selectedColors = Array.from(colorCheckboxes)
+                          .filter(cb => cb.checked)
+                          .map(cb => cb.id);
+    console.log("Màu đã chọn:", selectedColors);
+  });
+});
+
+
+//nút size
+const sizeButtons = document.querySelectorAll('#ContenSize button');
+let selectedSize = null; // chỉ lưu 1 giá trị
+
+sizeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Bỏ class 'active' của tất cả nút
+    sizeButtons.forEach(b => b.classList.remove('active'));
+    
+    // Bật nút được click
+    btn.classList.add('active');
+    
+    // Lưu giá trị
+    selectedSize = btn.textContent;
+    console.log("Size đã chọn:", selectedSize);
+  });
 });
