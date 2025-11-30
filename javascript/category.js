@@ -3,7 +3,7 @@
 // Config & fetch helper
 // ==========================
 const API_BASE = "http://localhost:8080/api/v1/categorys";
-const PRODUCT_API = "http://localhost:8080/api/products"; 
+const PRODUCT_API = "http://localhost:8080/api/v1/products"; 
 
 function getToken() {
   const token = localStorage.getItem("accessToken");

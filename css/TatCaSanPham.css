@@ -166,7 +166,7 @@ a {
 }
 
 .toggle-children {
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .toggle-children.xoay {
@@ -1494,7 +1494,8 @@ hr {
 /* Ảnh sản phẩm */
 .product-image {
     display: block;
-    width: 100%;
+    width: 283px;
+    height: 283px;
     transition: transform 0.3s ease; /* Hiệu ứng zoom nhẹ (tùy chọn) */
 }
 

@@ -65,10 +65,8 @@
     };
     if (accessToken) opts.headers['Authorization'] = 'Bearer ' + accessToken;
 
-    // notify backend (ignore failure)
     fetch('http://localhost:8080/api/v1/auth/logout', opts).catch(() => { });
 
-    // clear localStorage
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('isLoggedIn');
@@ -90,62 +88,59 @@
 })();
 
 // ============================
-// category menu render
+// category menu render (public)
 // ============================
 const categoryMenu = document.getElementById("categoryMenu");
 const API_ROOT_CATEGORIES = "http://localhost:8080/api/v1/categorys/root";
 const API_CHILD_CATEGORIES = id => `http://localhost:8080/api/v1/categorys/${id}`;
 
-// fetch helper với token
+// fetch public
 async function fetchData(url) {
-  const accessToken = localStorage.getItem("accessToken");
-  const headers = { "Content-Type": "application/json" };
-  if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
-
-  const res = await fetch(url, { headers });
+  const res = await fetch(url, { headers: { "Content-Type": "application/json" } });
   if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
   const data = await res.json();
   return data.data;
 }
 
-// đệ quy render menu multi-level
+// render menu đệ quy multi-level
 async function renderCategoryItem(category) {
   let html = `<li><a href="#">${category.name}</a>`;
 
-  // lấy con
-  const children = await fetchData(API_CHILD_CATEGORIES(category.id));
-  if (children && children.length > 0) {
-    html += '<ul>';
-    for (const child of children) {
-      html += await renderCategoryItem(child); // đệ quy
+  try {
+    const children = await fetchData(API_CHILD_CATEGORIES(category.id));
+    if (children && children.length > 0) {
+      html += '<ul>';
+      for (const child of children) {
+        html += await renderCategoryItem(child);
+      }
+      html += '</ul>';
     }
-    html += '</ul>';
+  } catch (err) {
+    console.error("Cannot load child categories:", err);
   }
 
   html += '</li>';
   return html;
 }
 
-// ... (trong hàm renderCategories)
+// render toàn bộ menu
 async function renderCategories() {
   if (!categoryMenu) return;
 
   try {
     const roots = await fetchData(API_ROOT_CATEGORIES);
+    if (!roots || roots.length === 0) {
+      categoryMenu.innerHTML = "<p>Chưa có danh mục</p>";
+      return;
+    }
 
-    // Bắt đầu bằng <li> chứa tên DANH MỤC. Danh mục cấp 1 sẽ nằm trong <ul> lồng bên dưới.
-    let html = '<ul><li class="menu-parent title"><a href="#">DANH MỤC <i class="ri-arrow-right-wide-fill"></i></a>';
-    
-    // Bắt đầu <ul> cho menu thả xuống cấp 1 (danh mục gốc)
-    html += '<ul>'; 
+    let html = '<ul><li class="menu-parent title"><a href="#">DANH MỤC <i class="ri-arrow-right-wide-fill"></i></a><ul>';
 
     for (const root of roots) {
-      // renderCategoryItem sẽ trả về <li>...</li>
       html += await renderCategoryItem(root);
     }
 
-    html += '</ul>'; // Kết thúc <ul> cấp 1
-    html += '</li></ul>'; // Kết thúc <li> và <ul> chính
+    html += '</ul></li></ul>';
 
     categoryMenu.innerHTML = html;
 
@@ -154,6 +149,5 @@ async function renderCategories() {
     categoryMenu.innerHTML = "<p>Không thể tải danh mục</p>";
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', renderCategories);
