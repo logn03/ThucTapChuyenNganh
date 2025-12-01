@@ -74,14 +74,26 @@ function formatPrice(price) {
     return `${price.toLocaleString('vi-VN')} VND`;
 }
 
+// ================================
+// Render sản phẩm
+// ================================
+// ... (hàm formatPrice giữ nguyên)
+
 function renderProduct(product) {
     const imageUrl = (product.images && product.images.length > 0) ? product.images[0].url : 'default-image.jpg';
+    
+    // **Thay đổi tại đây**
+    // Thêm data-product-id và gán sự kiện click
     return `
         <div class="col-12 col-md-6 col-lg-4 mb-4">
             <div class="product-item">
                 <div class="product-image-wrapper">
                     <img src="${imageUrl}" alt="${product.name}" class="img-fluid product-image">
-                    <div class="BoxMuaNgay">MUA NGAY</div>
+                    <div class="BoxMuaNgay" 
+                         data-product-id="${product.productId}" 
+                         onclick="navigateToProductDetail(${product.productId})">
+                        MUA NGAY
+                    </div>
                 </div>
                 <div class="product-details text-center mt-2">
                     <p class="product-name">${product.name}</p>
@@ -91,6 +103,19 @@ function renderProduct(product) {
         </div>
     `;
 }
+
+// ... (các biến cấu hình)
+
+/**
+ * Chuyển hướng đến trang chi tiết sản phẩm
+ * @param {number} productId ID của sản phẩm
+ */
+function navigateToProductDetail(productId) {
+    // Chuyển hướng đến trang chi tiết sản phẩm với productId là tham số URL
+    window.location.href = `ChiTietSanPham.html?productId=${productId}`;
+}
+
+// ... (các hàm khác)
 
 // ================================
 // Highlight category đang chọn
@@ -296,13 +321,16 @@ function renderPagination() {
 // ================================
 // Nút prev / next
 // ================================
+if(prevBtn){
 prevBtn.addEventListener('click', () => {
     if (currentPage > 0) fetchAndRenderProducts(currentPage - 1, currentCategoryId);
 });
+}
+if(nextBtn){
 nextBtn.addEventListener('click', () => {
     if (currentPage < totalPages - 1) fetchAndRenderProducts(currentPage + 1, currentCategoryId);
 });
-
+}
 // ================================
 // Đọc tham số URL
 // ================================
