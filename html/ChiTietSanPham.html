@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>LC.STORE</title>
+  <!-- my css -->
+       <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/TatCaSanPham.css" />
+  <!-- css bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css">
+
+  <!-- font google start -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet" />
+  <!-- font google end -->
+
+  <!-- Icon start-->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <!-- Icon end-->
+
+</head>
+<body>
+      <!-- Navigation menu srart-->
+  <div class="Navigation">
+    <ul class="Navigation-menu">
+
+      <!-- Navigation menu mobile end -->
+      <li class="Navigation-menu-logo">
+        <a href="./index.html">
+          <h1>LC.STORE</h1>
+        </a>
+      </li>
+      <li class="Navigation-menu-contents">
+        <ul>
+          <li id="categoryMenu">
+            <!-- JS sẽ render danh mục ở đây -->
+          </li>
+        </ul>
+      </li>
+
+
+      <li class="Navigation-menu-cart-user">
+        <ul>
+          <li class="Navigation-menu-user-normal" id="UserMenu">
+            <button id="btnLogin" class="btn-user">Đăng Nhập</button>
+            <button id="btnRegister" class="btn-user">Đăng Ký</button>
+          </li>
+          <!-- dang nhap dang ky mobile start -->
+          <li class="Navigation-menu-user">
+            <i class="ri-user-3-line"></i>
+            <div class="PropMenuUser">
+              <ul>
+                <li id="PropMenuUserLogin">ĐĂNG NHẬP</li>
+                <li id="PropMenuUserRegister">ĐĂNG KÝ</li>
+              </ul>
+            </div>
+          </li>
+          <!-- dang nhap dang ky mobile end -->
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <!-- Navigation menu end-->
+  <div id="overlay">
+  </div>
+  <!-- form register start-->
+  <div id="register-container">
+    <div class="register-form">
+      <div class="register-form-title">
+        <h2>Đăng Ký</h2>
+        <div class="iconX"><i class="ri-close-line"></i></div>
+      </div>
+      <form id="registerForm">
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="value" required="" id="firtname" />
+            <label>
+              <span style="transition-delay: 0ms">F</span>
+              <span style="transition-delay: 50ms">i</span>
+              <span style="transition-delay: 100ms">r</span>
+              <span style="transition-delay: 150ms">t</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="value" required="" id="lastname" />
+            <label>
+              <span style="transition-delay: 0ms">L</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">t</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="value" required="" id="Username" />
+            <label>
+              <span style="transition-delay: 0ms">U</span>
+              <span style="transition-delay: 50ms">s</span>
+              <span style="transition-delay: 100ms">e</span>
+              <span style="transition-delay: 150ms">r</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="email" required="" id="email" />
+            <label>
+              <span style="transition-delay: 0ms">E</span>
+              <span style="transition-delay: 50ms">m</span>
+              <span style="transition-delay: 100ms">a</span>
+              <span style="transition-delay: 150ms">i</span>
+              <span style="transition-delay: 200ms">l</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="tel" required="" id="sdt" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">h</span>
+              <span style="transition-delay: 100ms">o</span>
+              <span style="transition-delay: 150ms">n</span>
+              <span style="transition-delay: 200ms">e</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="password" required="" id="passwordRegister" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">s</span>
+              <span style="transition-delay: 200ms">w</span>
+              <span style="transition-delay: 250ms">o</span>
+              <span style="transition-delay: 300ms">r</span>
+              <span style="transition-delay: 350ms">d</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="register-form-group">
+          <div class="form-control">
+            <input type="password" required="" id="confirmPassword" />
+            <label>
+              <span style="transition-delay: 0ms">C</span>
+              <span style="transition-delay: 50ms">o</span>
+              <span style="transition-delay: 100ms">n</span>
+              <span style="transition-delay: 150ms">f</span>
+              <span style="transition-delay: 200ms">i</span>
+              <span style="transition-delay: 250ms">r</span>
+              <span style="transition-delay: 300ms">m</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- From Uiverse.io by himanshu9682 -->
+        <div class="containerBtn">
+          <a href="#" class="button type--B">
+            <div class="button__line"></div>
+            <div class="button__line"></div>
+            <span class="button__text" id="btnRegisterSubmit">Đăng ký</span>
+            <div class="button__drow1"></div>
+            <div class="button__drow2"></div>
+          </a>
+        </div>
+
+        <div id="registerMessage" style="color: red"></div>
+      </form>
+    </div>
+  </div>
+  <!-- form register end-->
+
+  <!-- form login start-->
+  <div id="login-container">
+    <div class="login-form">
+      <form id="loginForm">
+        <div class="login-form-title">
+          <h2 class="login-title">Đăng Nhập</h2>
+          <div class="iconX"><i class="ri-close-line"></i></div>
+        </div>
+        <div class="login-form-group">
+          <!-- From Uiverse.io by liyaxu123 -->
+          <div class="form-control">
+            <input type="value" required="" id="username" />
+            <label>
+              <span style="transition-delay: 0ms">U</span>
+              <span style="transition-delay: 50ms">s</span>
+              <span style="transition-delay: 100ms">e</span>
+              <span style="transition-delay: 150ms">r</span>
+              <span style="transition-delay: 200ms">n</span>
+              <span style="transition-delay: 250ms">a</span>
+              <span style="transition-delay: 300ms">m</span>
+              <span style="transition-delay: 350ms">e</span>
+            </label>
+          </div>
+        </div>
+        <div class="login-form-group">
+          <div class="form-control">
+            <input type="password" required="" id="passwordLogin" />
+            <label>
+              <span style="transition-delay: 0ms">P</span>
+              <span style="transition-delay: 50ms">a</span>
+              <span style="transition-delay: 100ms">s</span>
+              <span style="transition-delay: 150ms">s</span>
+              <span style="transition-delay: 200ms">w</span>
+              <span style="transition-delay: 250ms">o</span>
+              <span style="transition-delay: 300ms">r</span>
+              <span style="transition-delay: 350ms">d</span>
+            </label>
+          </div>
+
+          <span><i id="open-eye" class="ri-eye-line"></i></span>
+        </div>
+        <div class="containerBtn">
+          <a href="#" class="button type--B">
+            <div class="button__line"></div>
+            <div class="button__line"></div>
+            <span class="button__text" id="btnLoginSubmit" class="login-button">Đăng nhập</span>
+            <div class="button__drow1"></div>
+            <div class="button__drow2"></div>
+          </a>
+        </div>
+        <div class="login-footer">
+          <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- form login end-->
+
+     <!-- Sidebar -->
+      <div class="col-12 SideBarsMobile d-block d-md-none d-lg-none d-xl-none">
+        <button id="BtnSideBarMobile"><i class="ri-arrow-right-s-line" style="font-size: 24px;"></i></button>
+      </div>
+      <div id="Sidebars" class="col-2 Sidebars d-block d-lg-none d-xl-none d-xxl-none">
+        <div class="SideBarContainer">
+          <div id="DanhMuc" class="d-flex justify-content-between">
+            <h2>DANH MỤC</h2>
+            <i id="IconFilter" class="ri-sound-module-line" style="font-size: 22px;"></i>
+          </div>
+          <hr>
+          <div class="SideBarsContent">
+            <div id="CategoryListContainer">
+            </div>
+          </div>
+          <div class="SidebarsPrice">
+            <div id="PriceItem" class="PiceItem d-flex justify-content-between align-items-center">
+            </div>
+          </div>
+          <div class="SideBarsColor">
+            <div id="TitleColor" class="Color d-flex justify-content-between align-items-center">         
+            </div>
+            <div id="ContentColor" class="LuaChonMau col-12">
+            </div>
+          </div>
+          <div class="SideBarsSize">
+            <div id="TitleSize" class="Size d-flex justify-content-between align-items-center">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+
+  <!-- footer srart-->
+  <div class="footer">
+    <div class="footer-contents">
+      <ul class="footer-contents-item1 item-footer">
+        <li>
+          <h1>LC.Store</h1>
+        </li>
+        <li>
+          We have clothes that suits your style and which you’re proud to
+          wear. From women to men.
+        </li>
+        <li>
+          <ul class="footer-contents-item1-icon">
+            <li><i class="ri-twitter-fill"></i></li>
+            <li><i class="ri-facebook-circle-fill"></i></li>
+            <li><i class="ri-instagram-line"></i></li>
+            <li><i class="ri-github-fill"></i></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="footer-contents-item2 item-footer">
+        <h2>company</h2>
+        <li>About</li>
+        <li>Features</li>
+        <li>Works</li>
+        <li>Career</li>
+      </ul>
+      <ul class="footer-contents-item3 item-footer">
+        <h2>Help</h2>
+        <li>Customer Support</li>
+        <li>Delivery Details</li>
+        <li>Terms & Conditions</li>
+        <li>Privacy Policy</li>
+      </ul>
+      <ul class="footer-contents-item4 item-footer">
+        <h2>FAQ</h2>
+        <li>Account</li>
+        <li>Manage Deliveries</li>
+        <li>Orders</li>
+        <li>Payments</li>
+      </ul>
+      <ul class="footer-contents-item5 item-footer">
+        <h2>Resources</h2>
+        <li>Free eBooks</li>
+        <li>Development Tutoria</li>
+        <li>How to - Blog</li>
+        <li>Youtube Playlist</li>
+      </ul>
+    </div>
+
+    <!-- container-3 -->
+    <div class="container-3">
+      <ul>
+        <li>
+          <h1>STAY UPTO DATE ABOUT OUR LATEST OFFERS</h1>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- footer end-->
+  <script type="importmap">
+      {
+        "imports": {
+          "jwt-decode": "https://unpkg.com/jwt-decode@4.0.0/build/esm/index.js"
+        }
+      }
+    </script>
+  <script type="module" src="/javascript/MainJs.js"></script>
+  <script src="/javascript/JSTatCaSanPham.js"></script>
+  <script src="/javascript/auth.js"></script>
+  <script type="module" src="/javascript/register.js"></script>
+  <script type="module" src="/javascript/Login.js"></script>
+</body>
+</body>
+</html>
